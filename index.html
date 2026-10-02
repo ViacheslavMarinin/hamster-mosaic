@@ -19,8 +19,13 @@
 :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);box-sizing:border-box}
 *,*::before,*::after{box-sizing:border-box}
 [hidden]{display:none!important}
-.home{display:inline-flex;align-items:center;gap:4px;font-size:.78rem;font-weight:800;color:var(--muted);text-decoration:none}
-.home:hover{color:var(--accent)}
+.homebtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;flex:none;width:48px;height:48px;border-radius:14px;
+  background:var(--accent);color:#fff;text-decoration:none;font-weight:800;font-size:.68rem;line-height:1;box-shadow:0 2px 0 rgba(0,0,0,.18)}
+.backlink{font-size:.85rem;font-weight:800;color:var(--accent);text-decoration:none}
+.backlink:hover{text-decoration:underline}
+.homebtn:hover{filter:brightness(1.06)}
+.homebtn:active{transform:translateY(1px);box-shadow:none}
+.homebtn:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
 </style>
 
 <style>
@@ -61,8 +66,11 @@ canvas{display:block;touch-action:manipulation;-webkit-tap-highlight-color:trans
 </head>
 <body>
 <header>
-  <div style="min-width:0">
-    <a class="home" href="/">‹ Мой маленький мир</a>
+  <a class="homebtn" href="https://mlymir.ru/" aria-label="Вернуться в «Мой маленький мир»" title="Вернуться в «Мой маленький мир»">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 11.2 12 4l8 7.2V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z" fill="currentColor"/></svg>
+    <span>Мир</span>
+  </a>
+  <div style="min-width:0;flex:1">
     <h1>Хомячья мозаика</h1>
     <div class="sub" id="sub"></div>
   </div>
@@ -75,6 +83,7 @@ canvas{display:block;touch-action:manipulation;-webkit-tap-highlight-color:trans
       <h2 id="ovT"></h2>
       <p id="ovP"></p>
       <div class="row"><button id="ovRetry">Заново</button><button id="ovNext" class="on">Дальше</button></div>
+      <a class="backlink" href="https://mlymir.ru/">Вернуться в «Мой маленький мир»</a>
     </div>
   </div>
   <div class="overlay" id="lv" hidden>
@@ -83,6 +92,7 @@ canvas{display:block;touch-action:manipulation;-webkit-tap-highlight-color:trans
       <p class="legend">Хомяки грызут снизу вверх. С 7-го уровня — связанные норки, их берут парой. С 12-го — скрытые норки «?», цвет виден только наверху</p>
       <div id="lvGrid"></div>
       <div class="row"><button id="lvClose">Закрыть</button></div>
+      <a class="backlink" href="https://mlymir.ru/">Вернуться в «Мой маленький мир»</a>
     </div>
   </div>
 </div>
