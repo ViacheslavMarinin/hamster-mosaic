@@ -258,8 +258,8 @@ function tap(px,py){
     if(Math.abs(px-b.tx)<b.tw/2&&Math.abs(py-b.ty)<b.th/2){
       const free=S.slots.filter(s=>!s).length;let take=[ci];
       if(b.link>=0){const pj=S.cols.findIndex((c,cj)=>cj!==ci&&c[0]&&c[0].link===b.link);
-        if(pj<0){S.shake=.35;say('Связанная норка ещё не наверху');return}
-        if(free<2){S.shake=.35;say('Для пары нужно 2 свободных места');return}
+        if(pj<0){S.shake=.35;S.hl=b.link;S.hlT=1.4;say(`Пара №${b.link+1} ещё не наверху — она подсвечена`);return}
+        if(free<2){S.shake=.35;S.hl=b.link;S.hlT=1.4;say(`Для пары №${b.link+1} нужно 2 свободных места`);return}
         take=[ci,pj]}
       else if(!free){S.shake=.35;say('Обойма заполнена');return}
       for(const cj of take){const o=S.cols[cj].shift(),si=S.slots.indexOf(null);S.slots[si]=o;const g=slotGeom(si);
@@ -273,7 +273,7 @@ function update(dt){
   const f=Math.min(1,dt*14),fa=Math.min(1,dt*10);
   S.cols.flat().concat(S.slots.filter(Boolean)).forEach(b=>{
     if(b.flip>0)b.flip=Math.max(0,b.flip-dt*2.6);b.x+=(b.tx-b.x)*f;b.y+=(b.ty-b.y)*f;b.w+=(b.tw-b.w)*f;b.h+=(b.th-b.h)*f;b.a+=(b.ta-b.a)*fa});
-  S.shake=Math.max(0,S.shake-dt);if(S.msgT>0)S.msgT-=dt;
+  S.shake=Math.max(0,S.shake-dt);if(S.msgT>0)S.msgT-=dt;if(S.hlT>0)S.hlT-=dt;
   S.slots.forEach((b,i)=>{if(!b)return;
     const arrived=Math.abs(b.x-b.tx)<2&&Math.abs(b.y-b.ty)<2;b.idle=false;
     if(arrived&&b.left>0){b.cd-=dt;
@@ -329,16 +329,24 @@ function drawClosed(b){const x=b.x-b.w/2,y=b.y-b.h/2;
   ctx.fillStyle=EARTH;ctx.beginPath();ctx.ellipse(b.x,b.y+b.h/2-11,Math.min(24,b.w/2-6),12,0,Math.PI,0);ctx.fill();
   ctx.fillStyle=HOLE;ctx.beginPath();ctx.ellipse(b.x,b.y+b.h/2-12,Math.min(24,b.w/2-6)*.5,5.5,0,0,Math.PI*2);ctx.fill();
   text('?',b.x,b.y-7,20,'#f3e6d2','center',900)}
-function drawRope(x1,y1,x2,y2,a){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.lineCap='round';
-  ctx.strokeStyle='#6b4423';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(x1,y1);ctx.quadraticCurveTo((x1+x2)/2,y1+9,x2,y2);ctx.stroke();
-  ctx.strokeStyle='#c99a5b';ctx.lineWidth=2;ctx.setLineDash([3,3]);ctx.stroke();ctx.setLineDash([]);
-  ctx.fillStyle='#6b4423';[[x1,y1],[x2,y2]].forEach(([x,y])=>{ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fill()});ctx.restore()}
+const LINKC=['#2450a6','#a6246f','#16775a','#9a5a12','#5b34a8','#b02a2a','#0f6f8f','#6b6b14'];
+const linkCol=id=>LINKC[id%LINKC.length];
+// numbered tag shown on both burrows of a pair (and under a column when the partner is deeper)
+function drawTag(cx,cy,id,a,pulse){ctx.save();ctx.globalAlpha=Math.max(0,a);const s=1+(pulse||0)*.25;ctx.translate(cx,cy);ctx.scale(s,s);
+  rr(-15,-9,30,18,9);ctx.fillStyle='#fff';ctx.fill();rr(-13,-7,26,14,7);ctx.fillStyle=linkCol(id);ctx.fill();
+  ctx.strokeStyle='#fff';ctx.lineWidth=1.6;ctx.beginPath();ctx.ellipse(-7,0,3.2,2.2,0,0,Math.PI*2);ctx.stroke();ctx.beginPath();ctx.ellipse(-2.5,0,3.2,2.2,0,0,Math.PI*2);ctx.stroke();
+  text(String(id+1),5.5,.5,11,'#fff','center',900);ctx.restore()}
+function hlPulse(id){return S.hlT>0&&S.hl===id?Math.abs(Math.sin(S.hlT*9)):0}
+function drawRope(x1,y1,x2,y2,a,id){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.lineCap='round';const c=linkCol(id);
+  ctx.strokeStyle='#fff';ctx.lineWidth=8;ctx.beginPath();ctx.moveTo(x1,y1);ctx.quadraticCurveTo((x1+x2)/2,(y1+y2)/2+10,x2,y2);ctx.stroke();
+  ctx.strokeStyle=c;ctx.lineWidth=5;ctx.stroke();
+  ctx.strokeStyle='rgba(255,255,255,.55)';ctx.lineWidth=1.6;ctx.setLineDash([3,4]);ctx.stroke();ctx.setLineDash([]);ctx.restore()}
 function drawBurrow(b,top){
   ctx.save();ctx.globalAlpha=Math.max(0,Math.min(1,b.a))*(top===false?.55:1);
   // flip-in: first half shows the closed face, second half the colour
   const fl=b.flip>0?Math.abs(Math.cos(b.flip*Math.PI/2*2)):1,closed=b.hidden||b.flip>.5;
   if(fl<1){ctx.translate(b.x,0);ctx.scale(Math.max(.05,fl),1);ctx.translate(-b.x,0)}
-  if(closed){drawClosed(b);ctx.restore();return}
+  if(closed){drawClosed(b);linkMark(b);ctx.restore();return}
   const col=S.L.pal[b.c];
   const x=b.x-b.w/2,y=b.y-b.h/2,mr=Math.min(24,b.w/2-6);
   rr(x,y+3,b.w,b.h,12);ctx.fillStyle=shade(col,-.35);ctx.fill();
@@ -351,7 +359,10 @@ function drawBurrow(b,top){
   ctx.fillStyle='rgba(255,255,255,.92)';ctx.beginPath();ctx.arc(b.x+b.w/2-13,y+13,10.5,0,Math.PI*2);ctx.fill();
   text(b.left,b.x+b.w/2-13,y+13.5,b.left>99?9:11.5,'#3a2721');
   if(b.idle)text('zz',x+12,y+13,12,'rgba(255,255,255,.95)','center',900);
-  ctx.restore()}
+  linkMark(b);ctx.restore()}
+function linkMark(b){if(b.link<0)return;const x=b.x-b.w/2,y=b.y-b.h/2,p=hlPulse(b.link);
+  ctx.lineWidth=3+p*2;ctx.strokeStyle=linkCol(b.link);rr(x+1.5,y+1.5,b.w-3,b.h-3,11);ctx.stroke();
+  drawTag(x+17,y+12,b.link,1,p)}
 
 function drawHamster(h,hs){
   const bob=Math.sin(h.ph)*1.5*hs,col=S.L.pal[h.b.c];
@@ -391,12 +402,15 @@ function draw(){
   for(let ci=0;ci<S.colsN;ci++){const col=S.cols[ci],g=colGeom(ci);
     rr(g.x-g.w/2,494,g.w,186,15);ctx.fillStyle=T.panel;ctx.fill();
     for(let k=Math.min(col.length,4)-1;k>=0;k--)drawBurrow(col[k],k===0);
-    if(col.length>3)text(`+${col.length-3}`,g.x,694,12,T.muted);
-    for(let k=0;k<Math.min(col.length,3);k++){const b=col[k];if(b.link<0)continue;
-      let p=null;for(let cj=ci+1;cj<S.colsN&&!p;cj++){const q=S.cols[cj].slice(0,3).find(o=>o.link===b.link);if(q)p=q}
-      if(!p){if(!S.cols.some((c,cj)=>cj<ci&&c.slice(0,3).some(o=>o.link===b.link)))drawRope(b.x+b.w/2,b.y,b.x+b.w/2+8,b.y,b.a);continue}
-      drawRope(b.x+b.w/2-4,b.y,p.x-p.w/2+4,p.y,Math.min(b.a,p.a))}
+    if(col.length>3){const deep=col.slice(3).filter(o=>o.link>=0).slice(0,g.w>95?2:1);
+      if(!deep.length)text(`+${col.length-3}`,g.x,694,12,T.muted);
+      else{const w=26+deep.length*32,x0=g.x-w/2;text(`+${col.length-3}`,x0+12,694,12,T.muted);
+        deep.forEach((o,k)=>drawTag(x0+26+16+k*32,694,o.link,1,hlPulse(o.link)))}}
     if(!col.length)text('пусто',g.x,587,12,T.muted)}
+  for(let ci=0;ci<S.colsN;ci++)S.cols[ci].slice(0,3).forEach(b=>{if(b.link<0)return;
+    for(let cj=ci+1;cj<S.colsN;cj++){const p=S.cols[cj].slice(0,3).find(o=>o.link===b.link);
+      if(p){drawRope(b.x+b.w/2-6,b.y+8,p.x-p.w/2+6,p.y+8,Math.min(b.a,p.a),b.link);
+        drawTag(b.x-b.w/2+17,b.y-b.h/2+12,b.link,Math.min(1,b.a),hlPulse(b.link));drawTag(p.x-p.w/2+17,p.y-p.h/2+12,p.link,Math.min(1,p.a),hlPulse(p.link));break}}});
   S.slots.forEach(b=>b&&drawBurrow(b,null));
   if(S.msgT>0){ctx.globalAlpha=Math.min(1,S.msgT*2);rr(W/2-155,474,310,26,13);ctx.fillStyle=T.ink;ctx.fill();text(S.msg,W/2,487.5,12,T.panel);ctx.globalAlpha=1}
   const hs=Math.max(.6,Math.min(1,cell/22));S.ham.forEach(h=>drawHamster(h,hs));
