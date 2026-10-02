@@ -109,7 +109,7 @@ canvas{display:block;touch-action:manipulation;-webkit-tap-highlight-color:trans
 </div>
 
 <script>
-const LEVEL_SEEDS=[[74,4],[0,4],[0,4],[0,3],[0,3],[30,3],[82,3],[52,3],[114,3],[58,3],[116,3],[40,3],[115,3],[18,3],[49,3],[73,3],[34,3],[0,3],[5,3],[84,3],[71,3],[109,3],[60,3],[95,3],[78,3],[108,3],[18,3],[30,3],[33,3],[39,3],[40,3],[18,3],[32,3],[63,3],[29,3],[110,3],[35,3],[50,3],[94,3],[52,3],[13,3],[63,3],[4,3],[47,3],[46,3],[22,3],[37,3],[53,3],[1,3],[50,3],[19,3],[49,3],[40,3],[8,3],[29,3],[0,3],[44,3],[3,3],[30,3],[57,3],[16,3],[53,3],[12,3],[25,3],[39,3],[60,3],[2,3],[34,3],[5,3],[22,5],[55,3],[16,3],[3,3],[0,3],[16,3],[20,3],[1,3],[47,3],[55,4],[2,3],[3,3],[12,3],[9,4],[64,3],[0,3],[40,3],[8,3],[10,3],[61,3],[3,3],[67,3],[36,3],[9,3],[22,4],[66,3],[0,3],[13,3],[9,3],[9,3],[1,4]];
+const LEVEL_SEEDS=[[74,4],[0,4],[0,4],[0,3],[0,3],[30,3],[15,3],[24,3],[114,3],[58,3],[116,3],[40,3],[115,3],[18,3],[70,3],[75,3],[109,3],[0,3],[111,3],[34,3],[72,3],[72,3],[116,3],[95,3],[73,3],[108,3],[18,3],[30,3],[33,3],[89,3],[40,3],[18,3],[82,3],[115,3],[84,3],[110,3],[77,3],[50,3],[118,3],[94,3],[26,3],[52,3],[7,3],[55,3],[46,3],[25,3],[41,3],[2,3],[2,3],[15,3],[20,3],[38,3],[67,3],[5,3],[29,3],[3,3],[44,3],[3,3],[66,3],[57,3],[9,3],[27,3],[13,3],[25,3],[14,3],[42,3],[0,3],[36,3],[30,3],[9,4],[55,3],[0,3],[6,3],[33,3],[1,4],[20,3],[42,3],[7,3],[55,3],[24,3],[0,3],[18,3],[4,4],[64,3],[8,3],[56,3],[4,3],[10,3],[2,3],[3,3],[43,3],[48,3],[44,3],[26,3],[57,3],[25,3],[13,3],[1,3],[22,4],[1,4]];
 /*GEN*/
 function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 function shuf(a,r){for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
@@ -146,11 +146,11 @@ function slotBX(si,S,n){const sw=Math.min(62,(350-8*(S-1))/S),x0=(390-(S*sw+(S-1
 function accG(g,n,x,y){return y===n-1||(y>0&&g[y-1][x]===null)||g[y+1][x]===null||(x>0&&g[y][x-1]===null)||(x<n-1&&g[y][x+1]===null)}
 function simNew(g0,deal,S){const n=g0.length;return{n,S,deal,g:g0.map(r=>r.slice()),rem:n*n,ptr:deal.map(()=>0),slots:Array(S).fill(null)}}
 function simClone(st){return{...st,g:st.g.map(r=>r.slice()),ptr:st.ptr.slice(),slots:st.slots.map(b=>b&&{...b})}}
-function settle(st){const{g,n}=st;let p=true;
+function settle(st,onEat){const{g,n}=st;let p=true;
   while(p){p=false;for(const b of st.slots){if(!b||!b.left)continue;const l=[];
     for(let y=0;y<n;y++)for(let x=0;x<n;x++)if(g[y][x]===b.c&&accG(g,n,x,y))l.push([x,y]);
-    if(!l.length)continue;l.sort((a,c)=>c[1]-a[1]||Math.abs(a[0]-b.sx)-Math.abs(c[0]-b.sx));
-    for(const[x,y]of l){if(!b.left)break;g[y][x]=null;b.left--;st.rem--;p=true}}}
+    if(!l.length)continue;l.sort((a,c)=>c[1]-a[1]||a[0]-c[0]);
+    for(const[x,y]of l){if(!b.left)break;g[y][x]=null;b.left--;st.rem--;p=true;if(onEat)onEat(b,x,y)}}}
   st.slots=st.slots.map(b=>b&&b.left?b:null)}
 function moves(tops,free){const out=[];tops.forEach((b,ci)=>{if(!b)return;
   if(b.link<0){if(free>=1)out.push([ci]);return}
@@ -219,7 +219,7 @@ function makeLevel(i){
       else order.push([colOf[j]])}
     const replay=()=>{const t=simNew(grid,d,S);for(const mv of order){settle(t);if(!simMoves(t).some(m=>m.length===mv.length&&m.every(x=>mv.includes(x))))return false;simApply(t,mv)}settle(t);return !t.rem};
     if(!replay()){seq.forEach(o=>o.link=-1);order.length=0;colOf.forEach(c=>order.push([c]));if(!replay())return null}
-    return d};
+    d.order=order;return d};
   let slots=p.slots,deal=null,tries=0;
   const pre=typeof LEVEL_SEEDS!=='undefined'&&LEVEL_SEEDS[i];
   if(pre){p.slots=slots=pre[1];deal=mkDeal(pre[0])}
@@ -252,8 +252,11 @@ function load(i){
   const grid=L.grid.map(r=>r.slice()),res=grid.map(r=>r.map(()=>0));
   S={L,n,grid,res,slotsN:L.slots,colsN:L.cols,slots:Array(L.slots).fill(null),ham:[],puffs:[],total:L.total,eaten:0,
      cell:BOARD/n,BX:(W-BOARD)/2,BY:58,state:'play',stuck:0,shake:0};
+  // The game follows the same model the levels were checked with: when a burrow lands in the clip,
+  // the model decides at once which pixels its hamsters will take, and the animation plays that plan.
+  S.sim={n,S:L.slots,g:L.grid.map(r=>r.slice()),rem:n*n,slots:Array(L.slots).fill(null)};
   S.cols=L.deal.map((col,ci)=>col.map((o,k)=>{const g=colGeom(ci),w=g.w-8;
-    return{c:o.c,left:o.left,link:o.link,hidden:o.hidden,flip:0,out:0,cd:0,x:g.x,tx:g.x,y:cardY(k),ty:cardY(k),w,tw:w,h:54,th:54,a:k<3?1:0,ta:k<3?1:0}}));
+    return{c:o.c,left:o.left,link:o.link,hidden:o.hidden,flip:0,out:0,cd:0,queue:[],x:g.x,tx:g.x,y:cardY(k),ty:cardY(k),w,tw:w,h:54,th:54,a:k<3?1:0,ta:k<3?1:0}}));
   document.getElementById('ov').hidden=true;document.getElementById('lv').hidden=true;
   if(S.cols.flat().some(o=>o.hidden)&&!done.has(i)&&i===LEVELS_FIRST_HIDDEN())setTimeout(()=>say('Норки «?» откроются, когда поднимутся наверх'),600);
   document.getElementById('sub').textContent=`Уровень ${i+1} · ${L.name} · ${L.pal.length} цв. · ${n}×${n} · обойма ${L.slots}`;
@@ -263,12 +266,7 @@ function accessible(x,y){const g=S.grid,n=S.n;
   if(y===n-1)return true;
   return (y>0&&g[y-1][x]===null)||g[y+1][x]===null||(x>0&&g[y][x-1]===null)||(x<n-1&&g[y][x+1]===null)}
 function cellC(x,y){return{cx:S.BX+(x+.5)*S.cell,cy:S.BY+(y+.5)*S.cell}}
-function findTarget(c,px){let best=null,bd=1e9;const sx=(px-S.BX)/S.cell-.5;
-  for(let y=S.n-1;y>=0;y--){for(let x=0;x<S.n;x++){
-    if(S.grid[y][x]!==c||S.res[y][x]||!accessible(x,y))continue;
-    const d=Math.abs(x-sx);if(d<bd){bd=d;best={x,y,...cellC(x,y)}}}
-    if(best)break}
-  return best}
+function plan(){settle(S.sim,(m,x,y)=>m.ref.queue.push({x,y}))}
 function LEVELS_FIRST_HIDDEN(){for(let k=0;k<100;k++)if(hiddenP(k)>0)return k;return -1}
 function liveMoves(){return moves(S.cols.map(c=>c[0]||null),S.slots.filter(s=>!s).length)}
 function say(t){S.msg=t;S.msgT=1.8}
@@ -286,8 +284,9 @@ function tap(px,py){
       for(const cj of take){const o=S.cols[cj].shift(),si=S.slots.indexOf(null);S.slots[si]=o;const g=slotGeom(si);
         o.tx=g.x;o.ty=g.y;o.tw=g.w;o.th=54;o.ta=1;o.link=-1;
         S.cols[cj].forEach((q,k)=>{q.ty=cardY(k);q.ta=k<3?1:0});
-        const nt=S.cols[cj][0];if(nt&&nt.hidden){nt.hidden=false;nt.flip=1}}
-      return}}
+        const nt=S.cols[cj][0];if(nt&&nt.hidden){nt.hidden=false;nt.flip=1}
+        S.sim.slots[si]={c:o.c,left:o.left,ref:o}}
+      plan();return}}
 }
 
 function update(dt){
@@ -297,11 +296,12 @@ function update(dt){
   S.shake=Math.max(0,S.shake-dt);if(S.msgT>0)S.msgT-=dt;if(S.hlT>0)S.hlT-=dt;
   S.slots.forEach((b,i)=>{if(!b)return;
     const arrived=Math.abs(b.x-b.tx)<2&&Math.abs(b.y-b.ty)<2;b.idle=false;
-    if(arrived&&b.left>0){b.cd-=dt;
-      if(b.cd<=0){const t=findTarget(b.c,b.x);
-        if(t){S.res[t.y][t.x]=1;b.left--;b.out++;b.cd=.09;
-          S.ham.push({x:b.x+(Math.random()-.5)*b.w*.4,y:b.y-18,t,b,back:false,ph:Math.random()*6,dir:1})}
-        else b.idle=true}}
+    if(arrived&&b.queue.length){b.cd-=dt;
+      const q=b.queue[0];
+      if(b.cd<=0&&accessible(q.x,q.y)){b.queue.shift();const t={x:q.x,y:q.y,...cellC(q.x,q.y)};
+        S.res[t.y][t.x]=1;b.left--;b.out++;b.cd=.09;
+        S.ham.push({x:b.x+(Math.random()-.5)*b.w*.4,y:b.y-18,t,b,back:false,ph:Math.random()*6,dir:1})}}
+    b.idle=b.left>0&&!b.queue.length;
     if(b.left===0&&b.out===0)S.slots[i]=null});
   const sp=320;
   S.ham=S.ham.filter(h=>{
