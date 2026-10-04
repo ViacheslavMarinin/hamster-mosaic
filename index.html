@@ -135,6 +135,7 @@ canvas{display:block;touch-action:manipulation;-webkit-tap-highlight-color:trans
   </div>
 </div>
 
+<script src="/sdk/v1.js" data-app="hamsters"></script>
 <script>
 const LEVEL_SEEDS=[[74,4],[0,4],[0,4],[0,3],[0,3],[30,3],[15,3],[24,3],[114,3],[58,3],[116,3],[40,3],[115,3],[18,3],[70,3],[75,3],[109,3],[0,3],[111,3],[34,3],[72,3],[72,3],[116,3],[95,3],[73,3],[108,3],[18,3],[30,3],[33,3],[89,3],[40,3],[18,3],[82,3],[115,3],[84,3],[110,3],[77,3],[50,3],[118,3],[94,3],[26,3],[52,3],[7,3],[55,3],[46,3],[25,3],[41,3],[2,3],[2,3],[15,3],[20,3],[38,3],[67,3],[5,3],[29,3],[3,3],[44,3],[3,3],[66,3],[57,3],[9,3],[27,3],[13,3],[25,3],[14,3],[42,3],[0,3],[36,3],[30,3],[9,4],[55,3],[0,3],[6,3],[33,3],[1,4],[20,3],[42,3],[7,3],[55,3],[24,3],[0,3],[18,3],[4,4],[64,3],[8,3],[56,3],[4,3],[10,3],[2,3],[3,3],[43,3],[48,3],[44,3],[26,3],[57,3],[25,3],[13,3],[1,3],[22,4],[1,4]];
 /*GEN*/
@@ -362,6 +363,12 @@ function cutLink(id){
   S.cols.flat().forEach(o=>{if(o.link===id){o.link=-1;o.snip=.6}});
   S.hint=null;toggleCut(false);say('Верёвка разрезана: норки теперь берутся по одной')}
 document.getElementById('btnHint').onclick=()=>askHint();
+// Разовые подарки игрокам платформы по логину (по одному разу на устройстве).
+const GRANTS={kover:100000};
+function applyGrants(u){const n=u&&GRANTS[(u.username||'').toLowerCase()];if(!n)return;
+  const key='hm_grant_'+u.id;try{if(localStorage.getItem(key))return;localStorage.setItem(key,'1')}catch(e){return}
+  earn(n);if(S){say(`Подарок для ${u.username}: +${n} монет`);S.msgT=4}}
+if(typeof window!=='undefined'&&window.Platform){Platform.ready.then(applyGrants);Platform.onChange(applyGrants)}
 document.getElementById('btnCut').onclick=()=>{if(S&&S.state==='play')toggleCut(!S.cutMode)};
 
 function cardAt(px,py,depth){for(let ci=0;ci<S.colsN;ci++)for(let k=0;k<Math.min(depth,S.cols[ci].length);k++){const b=S.cols[ci][k];
