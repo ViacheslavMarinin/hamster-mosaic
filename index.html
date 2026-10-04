@@ -84,8 +84,7 @@ canvas{display:block;touch-action:manipulation;-webkit-tap-highlight-color:trans
 .tool.active .price{color:#fff}
 .prize{display:inline-flex;align-items:center;justify-content:center;gap:6px;color:var(--ink)!important;font-size:1.05rem}
 .prize .coin{width:22px;height:22px}
-@media (max-width:430px){.tool .price .coin{display:none}.tool .price::before{content:'·';margin-right:3px}}
-@media (max-width:340px){.tool>span:not(.price){display:none}}
+@media (max-width:440px){.tool>span:not(.price){display:none}.tool{padding:5px 9px}}
 </style>
 
 </head>
@@ -105,6 +104,7 @@ canvas{display:block;touch-action:manipulation;-webkit-tap-highlight-color:trans
   <span class="coins" id="coins" title="Монеты: +20 за каждый новый пройденный уровень"><svg class="coin" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="hmcoin" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff3a8"/><stop offset=".55" stop-color="#ffc936"/><stop offset="1" stop-color="#e89a10"/></radialGradient></defs><circle cx="12" cy="12.8" r="9.5" fill="#c98a12"/><circle cx="12" cy="11.6" r="9.5" fill="url(#hmcoin)" stroke="#a86e08" stroke-width="1.2"/><circle cx="12" cy="11.6" r="6.6" fill="none" stroke="#fff3b0" stroke-width="1.1" opacity=".8"/><path d="M12 7.2l1.3 2.7 2.9.4-2.1 2 .5 2.9-2.6-1.4-2.6 1.4.5-2.9-2.1-2 2.9-.4Z" fill="#fff3b0"/></svg><b id="coinN">0</b></span>
   <button class="tool" id="btnHint" title="Показать следующий верный ход"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 2.5a6.5 6.5 0 0 0-3.9 11.7c.6.5.9 1.1.9 1.8v.5h6v-.5c0-.7.3-1.3.9-1.8A6.5 6.5 0 0 0 12 2.5z" fill="currentColor"/><rect x="9" y="17.5" width="6" height="1.8" rx=".9" fill="currentColor"/><rect x="10" y="20.2" width="4" height="1.6" rx=".8" fill="currentColor"/></svg><span>Подсказка</span><span class="price"><svg class="coin" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="hmcoin2" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff3a8"/><stop offset=".55" stop-color="#ffc936"/><stop offset="1" stop-color="#e89a10"/></radialGradient></defs><circle cx="12" cy="12.8" r="9.5" fill="#c98a12"/><circle cx="12" cy="11.6" r="9.5" fill="url(#hmcoin2)" stroke="#a86e08" stroke-width="1.2"/><circle cx="12" cy="11.6" r="6.6" fill="none" stroke="#fff3b0" stroke-width="1.1" opacity=".8"/><path d="M12 7.2l1.3 2.7 2.9.4-2.1 2 .5 2.9-2.6-1.4-2.6 1.4.5-2.9-2.1-2 2.9-.4Z" fill="#fff3b0"/></svg>300</span></button>
   <button class="tool" id="btnCut" title="Разрезать верёвку между связанными норками"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="6" cy="6.5" r="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="6" cy="17.5" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8.4 8.3 20 18M8.4 15.7 20 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg><span>Ножницы</span><span class="price"><svg class="coin" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="hmcoin3" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff3a8"/><stop offset=".55" stop-color="#ffc936"/><stop offset="1" stop-color="#e89a10"/></radialGradient></defs><circle cx="12" cy="12.8" r="9.5" fill="#c98a12"/><circle cx="12" cy="11.6" r="9.5" fill="url(#hmcoin3)" stroke="#a86e08" stroke-width="1.2"/><circle cx="12" cy="11.6" r="6.6" fill="none" stroke="#fff3b0" stroke-width="1.1" opacity=".8"/><path d="M12 7.2l1.3 2.7 2.9.4-2.1 2 .5 2.9-2.6-1.4-2.6 1.4.5-2.9-2.1-2 2.9-.4Z" fill="#fff3b0"/></svg>300</span></button>
+  <button class="tool" id="btnUndo" title="Отменить последний ход"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M9 5 4 10l5 5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.5 10H14a6 6 0 0 1 0 12h-3" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span>Отмена</span><span class="price"><svg class="coin" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="hmcoin5" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff3a8"/><stop offset=".55" stop-color="#ffc936"/><stop offset="1" stop-color="#e89a10"/></radialGradient></defs><circle cx="12" cy="12.8" r="9.5" fill="#c98a12"/><circle cx="12" cy="11.6" r="9.5" fill="url(#hmcoin5)" stroke="#a86e08" stroke-width="1.2"/><circle cx="12" cy="11.6" r="6.6" fill="none" stroke="#fff3b0" stroke-width="1.1" opacity=".8"/><path d="M12 7.2l1.3 2.7 2.9.4-2.1 2 .5 2.9-2.6-1.4-2.6 1.4.5-2.9-2.1-2 2.9-.4Z" fill="#fff3b0"/></svg>200</span></button>
 </div>
 <div id="wrap">
   <canvas id="cv"></canvas>
@@ -113,7 +113,7 @@ canvas{display:block;touch-action:manipulation;-webkit-tap-highlight-color:trans
       <h2 id="ovT"></h2>
       <p id="ovP"></p>
       <p class="prize" id="ovPrize" hidden><svg class="coin" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="hmcoin4" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff3a8"/><stop offset=".55" stop-color="#ffc936"/><stop offset="1" stop-color="#e89a10"/></radialGradient></defs><circle cx="12" cy="12.8" r="9.5" fill="#c98a12"/><circle cx="12" cy="11.6" r="9.5" fill="url(#hmcoin4)" stroke="#a86e08" stroke-width="1.2"/><circle cx="12" cy="11.6" r="6.6" fill="none" stroke="#fff3b0" stroke-width="1.1" opacity=".8"/><path d="M12 7.2l1.3 2.7 2.9.4-2.1 2 .5 2.9-2.6-1.4-2.6 1.4.5-2.9-2.1-2 2.9-.4Z" fill="#fff3b0"/></svg><b>+20</b> монет</p>
-      <div class="row"><button id="ovRetry">Заново</button><button id="ovNext" class="on">Дальше</button></div>
+      <div class="row"><button id="ovRetry">Заново</button><button id="ovUndo" class="on">Отменить ход · 200</button><button id="ovNext" class="on">Дальше</button></div>
       <a class="backlink" href="https://mlymir.ru/">Вернуться в «Мой маленький мир»</a>
     </div>
   </div>
@@ -264,13 +264,14 @@ const W=390,H=720,BOARD=320;
 const EARTH='#8a5631',HOLE='#2a170c';
 const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
 let T={},S,lvl=0,scale=1,last=0,time=0,done=new Set(),coins=0;
-const PRICE_HINT=300,PRICE_CUT=300,PRIZE=20;
+const PRICE_HINT=300,PRICE_CUT=300,PRICE_UNDO=200,PRIZE=20;
 try{lvl=Math.min(99,+localStorage.getItem('hm_lvl')||0);done=new Set(JSON.parse(localStorage.getItem('hm_done')||'[]'));
   const c=localStorage.getItem('hm_coins');coins=c===null?PRIZE*done.size:Math.max(0,+c||0)}catch(e){}
 function save(){try{localStorage.setItem('hm_lvl',lvl);localStorage.setItem('hm_done',JSON.stringify([...done]));localStorage.setItem('hm_coins',coins)}catch(e){}}
 function showCoins(bump){const el=document.getElementById('coinN');if(!el)return;el.textContent=coins;
   document.getElementById('btnHint').classList.toggle('poor',coins<PRICE_HINT);
   document.getElementById('btnCut').classList.toggle('poor',coins<PRICE_CUT);
+  document.getElementById('btnUndo').classList.toggle('poor',coins<PRICE_UNDO);
   if(bump){const c=document.getElementById('coins');c.classList.add('bump');setTimeout(()=>c.classList.remove('bump'),220)}}
 
 function readTokens(){const cs=getComputedStyle(document.documentElement);['panel','ink','muted','line','accent','bg'].forEach(k=>T[k]=cs.getPropertyValue('--'+k).trim())}
@@ -293,7 +294,7 @@ function load(i){
   S.sim={n,S:L.slots,g:L.grid.map(r=>r.slice()),rem:n*n,slots:Array(L.slots).fill(null)};
   S.cols=L.deal.map((col,ci)=>col.map((o,k)=>{const g=colGeom(ci),w=g.w-8;
     return{c:o.c,left:o.left,link:o.link,hidden:o.hidden,flip:0,out:0,cd:0,queue:[],x:g.x,tx:g.x,y:cardY(k),ty:cardY(k),w,tw:w,h:54,th:54,a:k<3?1:0,ta:k<3?1:0}}));
-  S.hint=null;S.cutMode=false;document.getElementById('btnCut').classList.remove('active');
+  S.hint=null;S.cutMode=false;S.undo=[];document.getElementById('btnCut').classList.remove('active');
   document.getElementById('ov').hidden=true;document.getElementById('lv').hidden=true;document.getElementById('buy').hidden=true;showCoins();
   if(S.cols.flat().some(o=>o.hidden)&&!done.has(i)&&i===LEVELS_FIRST_HIDDEN())setTimeout(()=>say('Норки «?» откроются, когда поднимутся наверх'),600);
   document.getElementById('sub').textContent=`Уровень ${i+1} · ${L.name} · ${L.pal.length} цв. · ${n}×${n} · обойма ${L.slots}`;
@@ -364,7 +365,29 @@ function toggleCut(on){
 function cutLink(id){
   if(!spend(PRICE_CUT)){toggleCut(false);return}
   S.cols.flat().forEach(o=>{if(o.link===id){o.link=-1;o.snip=.6}});
+  S.undo.forEach(s=>s.cols.forEach(col=>col.forEach(e=>{if(e.link===id)e.link=-1})));
   S.hint=null;toggleCut(false);say('Верёвка разрезана: норки теперь берутся по одной')}
+// Отмена хода: позиция возвращается к моменту перед последним ходом — как будто хомяки уже доели всё, что было до него.
+function snapshot(){const sm=S.sim;
+  return{g:sm.g.map(r=>r.slice()),rem:sm.rem,q:sm.q||0,
+    slots:sm.slots.map(b=>b&&{c:b.c,left:b.left,q:b.q,ref:b.ref}),
+    cols:S.cols.map(col=>col.map(o=>({o,left:o.left,link:o.link,hidden:o.hidden})))}}
+function undoMove(){
+  if(!S||(S.state!=='play'&&S.state!=='lose'))return;
+  if(S.cutMode)toggleCut(false);
+  if(!S.undo.length){say('Нечего отменять — ходов ещё не было');return}
+  if(!spend(PRICE_UNDO))return poor(PRICE_UNDO,'Отмена хода');
+  const s=S.undo.pop();
+  S.sim={n:S.n,S:S.slotsN,g:s.g.map(r=>r.slice()),rem:s.rem,q:s.q,slots:s.slots.map(b=>b&&{c:b.c,left:b.left,q:b.q,ref:b.ref})};
+  S.grid=s.g.map(r=>r.slice());S.res=S.grid.map(r=>r.map(()=>0));S.eaten=S.total-s.rem;S.ham=[];
+  S.slots=s.slots.map((b,i)=>{if(!b)return null;const o=b.ref,g=slotGeom(i);
+    Object.assign(o,{left:b.left,queue:[],out:0,cd:0,idle:false,link:-1,hidden:false,tx:g.x,ty:g.y,tw:g.w,th:54,ta:1});return o});
+  S.cols=s.cols.map((col,ci)=>col.map((e,k)=>{const o=e.o,g=colGeom(ci);
+    Object.assign(o,{left:e.left,link:e.link,hidden:e.hidden,flip:0,queue:[],out:0,cd:0,idle:false,tx:g.x,ty:cardY(k),tw:g.w-8,th:54,ta:k<3?1:0});return o}));
+  S.hint=null;S.stuck=0;S.state='play';document.getElementById('ov').hidden=true;
+  say('Ход отменён')}
+document.getElementById('btnUndo').onclick=()=>undoMove();
+document.getElementById('ovUndo').onclick=()=>undoMove();
 document.getElementById('btnHint').onclick=()=>askHint();
 // Разовые подарки игрокам платформы по логину (по одному разу на устройстве).
 const GRANTS={kover:100000};
@@ -389,6 +412,7 @@ function tap(px,py){
         if(free<2){S.shake=.35;S.hl=b.link;S.hlT=1.4;say(`Для пары №${b.link+1} нужно 2 свободных места`);return}
         take=[ci,pj]}
       else if(!free){S.shake=.35;say('Обойма заполнена');return}
+      S.undo.push(snapshot());if(S.undo.length>30)S.undo.shift();
       for(const cj of take){const o=S.cols[cj].shift(),si=S.slots.indexOf(null);S.slots[si]=o;const g=slotGeom(si);
         o.tx=g.x;o.ty=g.y;o.tw=g.w;o.th=54;o.ta=1;o.link=-1;
         S.cols[cj].forEach((q,k)=>{q.ty=cardY(k);q.ta=k<3?1:0});
@@ -432,6 +456,7 @@ function showOv(win){
   document.getElementById('ovT').textContent=win?'Картинка разобрана!':'Обойма забита';
   document.getElementById('ovP').textContent=win?`Хомяки утащили все ${S.total} пикселей.`:'Хомяки в обойме не могут добраться до своего цвета, а новую норку взять нельзя. Попробуй другой порядок.';
   document.getElementById('ovNext').hidden=!win||lvl>=99;
+  document.getElementById('ovUndo').hidden=win||!S.undo.length;
   document.getElementById('ovPrize').hidden=!(win&&S.prize);
   document.getElementById('ov').hidden=false}
 document.getElementById('ovRetry').onclick=()=>load(lvl);
