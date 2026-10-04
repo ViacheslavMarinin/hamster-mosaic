@@ -390,7 +390,7 @@ document.getElementById('btnUndo').onclick=()=>undoMove();
 document.getElementById('ovUndo').onclick=()=>undoMove();
 document.getElementById('btnHint').onclick=()=>askHint();
 // Разовые подарки игрокам платформы по логину (по одному разу на устройстве).
-const GRANTS={kover:100000};
+const GRANTS={kover:100000,'сатана':10000};
 function applyGrants(u){const n=u&&GRANTS[(u.username||'').toLowerCase()];if(!n)return;
   const key='hm_grant_'+u.id;try{if(localStorage.getItem(key))return;localStorage.setItem(key,'1')}catch(e){return}
   earn(n);if(S){say(`Подарок для ${u.username}: +${n} монет`);S.msgT=4}}
