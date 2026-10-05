@@ -97,8 +97,7 @@ button.duckbtn img{width:22px;height:22px}
 button:disabled{opacity:.5;cursor:default}
 .prize{display:inline-flex;align-items:center;justify-content:center;gap:6px;color:var(--ink)!important;font-size:1.05rem}
 .prize .coin{width:22px;height:22px}
-@media (max-width:440px){.tool>span:not(.price){display:none}.tool{padding:5px 9px}}
-@media (max-width:440px){.tools{gap:4px}.tool{padding:5px 6px;gap:2px}.tool .price .coin{display:none}.lives{padding:4px 6px;gap:3px}.coins{gap:3px}}
+.tool>span:not(.price){display:none}.tools{gap:4px}.tool{flex-direction:column;gap:1px;padding:3px 6px;line-height:1}.tool .price{font-size:.68rem}.tool .price .coin{display:none}.tool svg{width:17px;height:17px}.lives{padding:4px 6px;gap:3px}.coins{gap:3px}
 @media (max-width:380px){.tool{padding:4px 4px}.tool svg{width:16px;height:16px}.tool .price{font-size:.7rem}.lives{padding:4px 5px}.lives small{font-size:.62rem}.coins{font-size:.9rem}.coin{width:18px;height:18px}}
 @media (max-width:340px){.lives small{display:none}}
 </style>
@@ -122,6 +121,7 @@ button:disabled{opacity:.5;cursor:default}
   <button class="tool" id="btnHint" title="Показать следующий верный ход"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 2.5a6.5 6.5 0 0 0-3.9 11.7c.6.5.9 1.1.9 1.8v.5h6v-.5c0-.7.3-1.3.9-1.8A6.5 6.5 0 0 0 12 2.5z" fill="currentColor"/><rect x="9" y="17.5" width="6" height="1.8" rx=".9" fill="currentColor"/><rect x="10" y="20.2" width="4" height="1.6" rx=".8" fill="currentColor"/></svg><span>Подсказка</span><span class="price"><svg class="coin" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="hmcoin2" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff3a8"/><stop offset=".55" stop-color="#ffc936"/><stop offset="1" stop-color="#e89a10"/></radialGradient></defs><circle cx="12" cy="12.8" r="9.5" fill="#c98a12"/><circle cx="12" cy="11.6" r="9.5" fill="url(#hmcoin2)" stroke="#a86e08" stroke-width="1.2"/><circle cx="12" cy="11.6" r="6.6" fill="none" stroke="#fff3b0" stroke-width="1.1" opacity=".8"/><path d="M12 7.2l1.3 2.7 2.9.4-2.1 2 .5 2.9-2.6-1.4-2.6 1.4.5-2.9-2.1-2 2.9-.4Z" fill="#fff3b0"/></svg>300</span></button>
   <button class="tool" id="btnCut" title="Разрезать верёвку между связанными норками"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="6" cy="6.5" r="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="6" cy="17.5" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8.4 8.3 20 18M8.4 15.7 20 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg><span>Ножницы</span><span class="price"><svg class="coin" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="hmcoin3" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff3a8"/><stop offset=".55" stop-color="#ffc936"/><stop offset="1" stop-color="#e89a10"/></radialGradient></defs><circle cx="12" cy="12.8" r="9.5" fill="#c98a12"/><circle cx="12" cy="11.6" r="9.5" fill="url(#hmcoin3)" stroke="#a86e08" stroke-width="1.2"/><circle cx="12" cy="11.6" r="6.6" fill="none" stroke="#fff3b0" stroke-width="1.1" opacity=".8"/><path d="M12 7.2l1.3 2.7 2.9.4-2.1 2 .5 2.9-2.6-1.4-2.6 1.4.5-2.9-2.1-2 2.9-.4Z" fill="#fff3b0"/></svg>300</span></button>
   <button class="tool" id="btnUndo" title="Отменить последний ход"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M9 5 4 10l5 5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.5 10H14a6 6 0 0 1 0 12h-3" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span>Отмена</span><span class="price"><svg class="coin" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="hmcoin5" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff3a8"/><stop offset=".55" stop-color="#ffc936"/><stop offset="1" stop-color="#e89a10"/></radialGradient></defs><circle cx="12" cy="12.8" r="9.5" fill="#c98a12"/><circle cx="12" cy="11.6" r="9.5" fill="url(#hmcoin5)" stroke="#a86e08" stroke-width="1.2"/><circle cx="12" cy="11.6" r="6.6" fill="none" stroke="#fff3b0" stroke-width="1.1" opacity=".8"/><path d="M12 7.2l1.3 2.7 2.9.4-2.1 2 .5 2.9-2.6-1.4-2.6 1.4.5-2.9-2.1-2 2.9-.4Z" fill="#fff3b0"/></svg>200</span></button>
+  <button class="tool" id="btnShuf" title="Перемешать норки в колонках"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M3 7h3.5c2.2 0 3.6 1 4.8 2.8l2.4 4.4c1.2 1.8 2.6 2.8 4.8 2.8H21M3 17h3.5c2.2 0 3.6-1 4.8-2.8M13.7 9.8c1.2-1.8 2.6-2.8 4.8-2.8H21M18 4l3 3-3 3M18 14l3 3-3 3" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Перемешать</span><span class="price"><svg class="coin" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="hmcoin6" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff3a8"/><stop offset=".55" stop-color="#ffc936"/><stop offset="1" stop-color="#e89a10"/></radialGradient></defs><circle cx="12" cy="12.8" r="9.5" fill="#c98a12"/><circle cx="12" cy="11.6" r="9.5" fill="url(#hmcoin6)" stroke="#a86e08" stroke-width="1.2"/><circle cx="12" cy="11.6" r="6.6" fill="none" stroke="#fff3b0" stroke-width="1.1" opacity=".8"/><path d="M12 7.2l1.3 2.7 2.9.4-2.1 2 .5 2.9-2.6-1.4-2.6 1.4.5-2.9-2.1-2 2.9-.4Z" fill="#fff3b0"/></svg>600</span></button>
 </div>
 <div id="wrap">
   <canvas id="cv"></canvas>
@@ -293,7 +293,7 @@ const W=390,H=720,BOARD=320;
 const EARTH='#8a5631',HOLE='#2a170c';
 const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
 let T={},S,lvl=0,scale=1,last=0,time=0,done=new Set(),coins=0;
-const PRICE_HINT=300,PRICE_CUT=300,PRICE_UNDO=200,PRIZE=20;
+const PRICE_HINT=300,PRICE_CUT=300,PRICE_UNDO=200,PRICE_SHUF=600,PRIZE=20;
 try{lvl=Math.min(99,+localStorage.getItem('hm_lvl')||0);done=new Set(JSON.parse(localStorage.getItem('hm_done')||'[]'));
   const c=localStorage.getItem('hm_coins');coins=c===null?PRIZE*done.size:Math.max(0,+c||0)}catch(e){}
 function save(){try{localStorage.setItem('hm_lvl',lvl);localStorage.setItem('hm_done',JSON.stringify([...done]));localStorage.setItem('hm_coins',coins)}catch(e){}}
@@ -301,6 +301,7 @@ function showCoins(bump){const el=document.getElementById('coinN');if(!el)return
   document.getElementById('btnHint').classList.toggle('poor',coins<PRICE_HINT);
   document.getElementById('btnCut').classList.toggle('poor',coins<PRICE_CUT);
   document.getElementById('btnUndo').classList.toggle('poor',coins<PRICE_UNDO);
+  document.getElementById('btnShuf').classList.toggle('poor',coins<PRICE_SHUF);
   if(bump){const c=document.getElementById('coins');c.classList.add('bump');setTimeout(()=>c.classList.remove('bump'),220)}}
 
 function readTokens(){const cs=getComputedStyle(document.documentElement);['panel','ink','muted','line','accent','bg'].forEach(k=>T[k]=cs.getPropertyValue('--'+k).trim())}
@@ -401,13 +402,13 @@ function earn(n){coins+=n;save();showCoins(true)}
 function spend(n){if(coins<n)return false;coins-=n;save();showCoins(true);return true}
 function poor(n,what){say(`${what} стоит ${n}, у тебя ${coins}. За каждый новый уровень +${PRIZE}`);S.msgT=3;buyCoins(n-coins)}
 // Состояние модели из текущей партии: поле и обойма как в игре, колонки — что в них осталось.
-function liveState(){const sm=S.sim;
+function liveState(cols){const sm=S.sim;cols=cols||S.cols;
   return{n:sm.n,S:sm.S,g:sm.g.map(r=>r.slice()),rem:sm.rem,q:sm.q||0,
-    slots:sm.slots.map(b=>b&&{c:b.c,left:b.left,q:b.q}),deal:S.cols.map(col=>col.map(o=>({c:o.c,left:o.left,link:o.link}))),ptr:S.cols.map(()=>0)}}
+    slots:sm.slots.map(b=>b&&{c:b.c,left:b.left,q:b.q}),deal:cols.map(col=>col.map(o=>({c:o.c,left:o.left,link:o.link}))),ptr:cols.map(()=>0)}}
 // Ищет ход, после которого уровень ещё можно пройти. 'dead' — из этой позиции не пройти, null — не успел найти.
-function findHint(){
-  const st0=liveState();let nodes=0,capped=false;const seen=new Set(),t0=performance.now();
-  const rec=st=>{if(++nodes>40000||performance.now()-t0>2500){capped=true;return null}
+function findHint(st0,ms){
+  st0=st0||liveState();ms=ms||2500;let nodes=0,capped=false;const seen=new Set(),t0=performance.now();
+  const rec=st=>{if(++nodes>40000||performance.now()-t0>ms){capped=true;return null}
     settle(st);if(!st.rem)return[];
     let gh=2166136261;for(const row of st.g)for(const c of row)gh=Math.imul(gh^(c===null?255:c),16777619);
     const key=st.ptr.join(',')+'|'+st.slots.filter(Boolean).sort((a,b)=>a.q-b.q).map(b=>b.c+':'+b.left).join(',')+'|'+(gh>>>0);
@@ -420,7 +421,7 @@ function findHint(){
   if(r===false&&!capped)return'dead';
   // запасной путь: несколько быстрых «разумных» партий
   const rng=mulberry(Date.now()|0);
-  for(let k=0;k<40;k++){const st=simClone(st0);let first=null;
+  for(let k=0;k<(ms<1000?8:40);k++){const st=simClone(st0);let first=null;
     for(let step=0;step<400;step++){settle(st);if(!st.rem)return first;const mv=simMoves(st);if(!mv.length)break;
       const ac=accCounts(st);let best=null,bs=-1e9;for(const m of mv){const s=heur(st,m,ac)+rng()*(k?500:0);if(s>bs){bs=s;best=m}}
       if(!first)first=best;simApply(st,best)}}
@@ -473,6 +474,51 @@ function undoMove(){
     Object.assign(o,{left:e.left,link:e.link,hidden:e.hidden,flip:0,queue:[],out:0,cd:0,idle:false,tx:g.x,ty:cardY(k),tw:g.w-8,th:54,ta:k<3?1:0});return o}));
   S.hint=null;S.stuck=0;S.state='play';document.getElementById('ov').hidden=true;
   say('Ход отменён')}
+// Перемешать: раскладываем оставшиеся норки по колонкам заново (длины колонок те же) и оставляем только раскладку,
+// из которой уровень проходится. Лучше та, где хватает простой тактики; иначе любая проходимая. Не нашли — монеты не списываем.
+// Строит раскладку от решения: из текущей позиции разыгрывает порядок норок, который проходит уровень
+// (пары — вместе и только при двух свободных местах), потом раскладывает этот порядок по колонкам тех же длин.
+function buildShuffle(cards,lens,rng){
+  const st=liveState(lens.map(()=>[]));const pool=cards.slice(),seq=[];
+  while(pool.length){settle(st);const free=st.slots.filter(x=>!x).length;if(!free)return null;
+    const units=[];const seen=new Set();
+    for(const o of pool){if(o.link<0){units.push([o]);continue}if(seen.has(o.link))continue;seen.add(o.link);
+      const pair=pool.filter(q=>q.link===o.link);units.push(pair.length===2?pair:[o])}
+    const fit=units.filter(u=>u.length<=free);if(!fit.length)return null;
+    const ac=accCounts(st),open=fit.filter(u=>u.some(o=>ac[o.c]));
+    const from=open.length&&rng()<.9?open:fit,u=from[Math.floor(rng()*from.length)];
+    for(const o of u){pool.splice(pool.indexOf(o),1);const si=st.slots.indexOf(null);st.slots[si]={c:o.c,left:o.left,q:st.q=(st.q||0)+1}}
+    seq.push(u)}
+  settle(st);if(st.rem)return null;
+  // по колонкам: порядок в колонке = порядок в решении, пара — в разные колонки
+  for(let d=0;d<12;d++){const r=placeSeq(seq,lens,rng);if(r)return r}
+  return null}
+function placeSeq(seq,lens,rng){
+  const cap=lens.slice(),cols=lens.map(()=>[]),order=[];
+  const pickCol=ex=>{const w=cap.map((c,i)=>i===ex?0:c);const s=w.reduce((a,b)=>a+b,0);if(!s)return -1;let t=rng()*s,i=0;while((t-=w[i])>0)i++;return i};
+  for(const u of seq){const mv=[];let ex=-1;
+    for(const o of u){const ci=pickCol(ex);if(ci<0)return null;cap[ci]--;cols[ci].push(o);mv.push(ci);ex=ci}order.push(mv)}
+  // проверка: этот порядок действительно проходит из текущей позиции
+  const t=liveState(cols);
+  for(const mv of order){settle(t);if(!simMoves(t).some(m=>m.length===mv.length&&m.every(x=>mv.includes(x))))return null;simApply(t,mv)}
+  settle(t);return t.rem?null:cols}
+function shuffleBurrows(){
+  if(!S||S.state!=='play')return;
+  if(S.cutMode)toggleCut(false);
+  const cards=S.cols.flat();
+  if(cards.length<2||S.cols.filter(c=>c.length).length<2){say('Перемешивать нечего');return}
+  if(!S.sim.slots.some(x=>!x)&&!S.ham.length){say('Обойма забита — перемешивание не поможет. Попробуй отменить ход');S.msgT=3;return}
+  if(coins<PRICE_SHUF)return poor(PRICE_SHUF,'Перемешать норки');
+  const lens=S.cols.map(c=>c.length),rng=mulberry(Date.now()|0),t0=performance.now();let pick=null;
+  for(let k=0;k<400&&performance.now()-t0<1500&&!pick;k++)pick=buildShuffle(cards,lens,rng);
+  const cols=pick;
+  if(!cols){say('Не нашлось удачной раскладки — монеты не списаны');S.msgT=3;return}
+  spend(PRICE_SHUF);
+  S.cols=cols;
+  S.cols.forEach((col,ci)=>{const g=colGeom(ci);col.forEach((o,k)=>{o.tx=g.x;o.ty=cardY(k);o.ta=k<3?1:0;o.flip=0;
+    if(k===0&&o.hidden){o.hidden=false;o.flip=1}})});
+  S.undo=[];S.hint=null;say('Норки перемешаны. Отменить ходы до этого уже нельзя');S.msgT=3}
+document.getElementById('btnShuf').onclick=()=>shuffleBurrows();
 document.getElementById('btnUndo').onclick=()=>undoMove();
 document.getElementById('ovUndo').onclick=()=>undoMove();
 document.getElementById('btnHint').onclick=()=>askHint();
