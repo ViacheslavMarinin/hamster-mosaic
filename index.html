@@ -82,9 +82,25 @@ canvas{display:block;touch-action:manipulation;-webkit-tap-highlight-color:trans
 .tool.poor{opacity:.55}
 .tool.active{background:var(--accent);border-color:var(--accent);color:#fff}
 .tool.active .price{color:#fff}
+.lives{display:inline-flex;align-items:center;gap:4px;padding:4px 8px;font-weight:900;font-size:.95rem;font-variant-numeric:tabular-nums}
+.lives small{font-size:.68rem;color:var(--muted);font-weight:800}
+.heart{width:18px;height:18px;flex:none}
+.coins.ex{cursor:pointer}
+.hearts{display:flex;justify-content:center;gap:6px;align-items:center}
+.hearts .heart{width:30px;height:30px}
+.hearts .off{filter:grayscale(1);opacity:.35}
+.hearts b{font-size:1rem;color:var(--muted)}
+.card .col{display:flex;flex-direction:column;gap:8px}
+.card .col button{padding:9px 12px;font-size:.95rem}
+button.duckbtn{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:#ffd23f;border-color:#ffd23f;color:#3a2a00}
+button.duckbtn img{width:22px;height:22px}
+button:disabled{opacity:.5;cursor:default}
 .prize{display:inline-flex;align-items:center;justify-content:center;gap:6px;color:var(--ink)!important;font-size:1.05rem}
 .prize .coin{width:22px;height:22px}
 @media (max-width:440px){.tool>span:not(.price){display:none}.tool{padding:5px 9px}}
+@media (max-width:440px){.tools{gap:4px}.tool{padding:5px 6px;gap:2px}.tool .price .coin{display:none}.lives{padding:4px 6px;gap:3px}.coins{gap:3px}}
+@media (max-width:380px){.tool{padding:4px 4px}.tool svg{width:16px;height:16px}.tool .price{font-size:.7rem}.lives{padding:4px 5px}.lives small{font-size:.62rem}.coins{font-size:.9rem}.coin{width:18px;height:18px}}
+@media (max-width:340px){.lives small{display:none}}
 </style>
 
 </head>
@@ -102,6 +118,7 @@ canvas{display:block;touch-action:manipulation;-webkit-tap-highlight-color:trans
 </header>
 <div class="tools">
   <span class="coins" id="coins" title="Монеты: +20 за каждый новый пройденный уровень"><svg class="coin" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="hmcoin" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff3a8"/><stop offset=".55" stop-color="#ffc936"/><stop offset="1" stop-color="#e89a10"/></radialGradient></defs><circle cx="12" cy="12.8" r="9.5" fill="#c98a12"/><circle cx="12" cy="11.6" r="9.5" fill="url(#hmcoin)" stroke="#a86e08" stroke-width="1.2"/><circle cx="12" cy="11.6" r="6.6" fill="none" stroke="#fff3b0" stroke-width="1.1" opacity=".8"/><path d="M12 7.2l1.3 2.7 2.9.4-2.1 2 .5 2.9-2.6-1.4-2.6 1.4.5-2.9-2.1-2 2.9-.4Z" fill="#fff3b0"/></svg><b id="coinN">0</b></span>
+  <button class="lives" id="lives" title="Жизни: тратятся, если не пройти новый уровень"><svg class="heart" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.2-9.4C1.6 7.6 3.9 4.5 7.2 4.5c2 0 3.6 1.1 4.8 2.8 1.2-1.7 2.8-2.8 4.8-2.8 3.3 0 5.6 3.1 4.4 6.6-1.7 4.8-9.2 9.4-9.2 9.4z" fill="#e8475f" stroke="#a5283c" stroke-width="1.2"/><path d="M7.4 7.3c-1.3.2-2.2 1.3-2.2 2.6" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" opacity=".7"/></svg><b id="livesN">5</b><small id="livesT"></small></button>
   <button class="tool" id="btnHint" title="Показать следующий верный ход"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 2.5a6.5 6.5 0 0 0-3.9 11.7c.6.5.9 1.1.9 1.8v.5h6v-.5c0-.7.3-1.3.9-1.8A6.5 6.5 0 0 0 12 2.5z" fill="currentColor"/><rect x="9" y="17.5" width="6" height="1.8" rx=".9" fill="currentColor"/><rect x="10" y="20.2" width="4" height="1.6" rx=".8" fill="currentColor"/></svg><span>Подсказка</span><span class="price"><svg class="coin" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="hmcoin2" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff3a8"/><stop offset=".55" stop-color="#ffc936"/><stop offset="1" stop-color="#e89a10"/></radialGradient></defs><circle cx="12" cy="12.8" r="9.5" fill="#c98a12"/><circle cx="12" cy="11.6" r="9.5" fill="url(#hmcoin2)" stroke="#a86e08" stroke-width="1.2"/><circle cx="12" cy="11.6" r="6.6" fill="none" stroke="#fff3b0" stroke-width="1.1" opacity=".8"/><path d="M12 7.2l1.3 2.7 2.9.4-2.1 2 .5 2.9-2.6-1.4-2.6 1.4.5-2.9-2.1-2 2.9-.4Z" fill="#fff3b0"/></svg>300</span></button>
   <button class="tool" id="btnCut" title="Разрезать верёвку между связанными норками"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="6" cy="6.5" r="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="6" cy="17.5" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8.4 8.3 20 18M8.4 15.7 20 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg><span>Ножницы</span><span class="price"><svg class="coin" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="hmcoin3" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff3a8"/><stop offset=".55" stop-color="#ffc936"/><stop offset="1" stop-color="#e89a10"/></radialGradient></defs><circle cx="12" cy="12.8" r="9.5" fill="#c98a12"/><circle cx="12" cy="11.6" r="9.5" fill="url(#hmcoin3)" stroke="#a86e08" stroke-width="1.2"/><circle cx="12" cy="11.6" r="6.6" fill="none" stroke="#fff3b0" stroke-width="1.1" opacity=".8"/><path d="M12 7.2l1.3 2.7 2.9.4-2.1 2 .5 2.9-2.6-1.4-2.6 1.4.5-2.9-2.1-2 2.9-.4Z" fill="#fff3b0"/></svg>300</span></button>
   <button class="tool" id="btnUndo" title="Отменить последний ход"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M9 5 4 10l5 5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.5 10H14a6 6 0 0 1 0 12h-3" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span>Отмена</span><span class="price"><svg class="coin" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="hmcoin5" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff3a8"/><stop offset=".55" stop-color="#ffc936"/><stop offset="1" stop-color="#e89a10"/></radialGradient></defs><circle cx="12" cy="12.8" r="9.5" fill="#c98a12"/><circle cx="12" cy="11.6" r="9.5" fill="url(#hmcoin5)" stroke="#a86e08" stroke-width="1.2"/><circle cx="12" cy="11.6" r="6.6" fill="none" stroke="#fff3b0" stroke-width="1.1" opacity=".8"/><path d="M12 7.2l1.3 2.7 2.9.4-2.1 2 .5 2.9-2.6-1.4-2.6 1.4.5-2.9-2.1-2 2.9-.4Z" fill="#fff3b0"/></svg>200</span></button>
@@ -122,6 +139,18 @@ canvas{display:block;touch-action:manipulation;-webkit-tap-highlight-color:trans
       <h2>Подсказка</h2>
       <p id="buyP">Показать следующий верный ход за 300 монет?</p>
       <div class="row"><button id="buyNo">Отмена</button><button id="buyYes" class="on">Показать</button></div>
+    </div>
+  </div>
+  <div class="overlay" id="lifeOv" hidden>
+    <div class="card">
+      <h2 id="lifeH">Жизни</h2>
+      <div class="hearts" id="hearts"></div>
+      <p id="lifeP"></p>
+      <div class="col">
+        <button id="lifeBuy" class="on"></button>
+        <button id="lifeDucks" class="duckbtn" hidden></button>
+        <button id="lifeClose">Закрыть</button>
+      </div>
     </div>
   </div>
   <div class="overlay" id="lv" hidden>
@@ -295,7 +324,7 @@ function load(i){
   S.cols=L.deal.map((col,ci)=>col.map((o,k)=>{const g=colGeom(ci),w=g.w-8;
     return{c:o.c,left:o.left,link:o.link,hidden:o.hidden,flip:0,out:0,cd:0,queue:[],x:g.x,tx:g.x,y:cardY(k),ty:cardY(k),w,tw:w,h:54,th:54,a:k<3?1:0,ta:k<3?1:0}}));
   S.hint=null;S.cutMode=false;S.undo=[];document.getElementById('btnCut').classList.remove('active');
-  document.getElementById('ov').hidden=true;document.getElementById('lv').hidden=true;document.getElementById('buy').hidden=true;showCoins();
+  document.getElementById('ov').hidden=true;document.getElementById('lv').hidden=true;document.getElementById('buy').hidden=true;document.getElementById('lifeOv').hidden=true;showCoins();
   if(S.cols.flat().some(o=>o.hidden)&&!done.has(i)&&i===LEVELS_FIRST_HIDDEN())setTimeout(()=>say('Норки «?» откроются, когда поднимутся наверх'),600);
   document.getElementById('sub').textContent=`Уровень ${i+1} · ${L.name} · ${L.pal.length} цв. · ${n}×${n} · обойма ${L.slots}`;
 }
@@ -309,10 +338,68 @@ function LEVELS_FIRST_HIDDEN(){for(let k=0;k<100;k++)if(hiddenP(k)>0)return k;re
 function liveMoves(){return moves(S.cols.map(c=>c[0]||null),S.slots.filter(s=>!s).length)}
 function say(t){S.msg=t;S.msgT=1.8}
 
+/* ---------- жизни (как в «Пико и сокровищах») ----------
+   5 жизней, +1 каждые 20 минут, +5 за 300 монет. Жизнь списывается первым ходом на непройденном уровне
+   и возвращается при победе: проиграл или начал заново — жизнь потрачена. Пройденные уровни — без жизней. */
+const LIFE_MAX=5,LIFE_MS=20*60*1000,LIFE_PRICE=300,HEART='<svg class="heart" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.2-9.4C1.6 7.6 3.9 4.5 7.2 4.5c2 0 3.6 1.1 4.8 2.8 1.2-1.7 2.8-2.8 4.8-2.8 3.3 0 5.6 3.1 4.4 6.6-1.7 4.8-9.2 9.4-9.2 9.4z" fill="#e8475f" stroke="#a5283c" stroke-width="1.2"/></svg>';
+let lives={n:LIFE_MAX,t:Date.now()};
+try{const l=JSON.parse(localStorage.getItem('hm_lives'));if(l&&typeof l.n==='number'&&typeof l.t==='number')lives=l}catch(e){}
+function saveLives(){try{localStorage.setItem('hm_lives',JSON.stringify(lives))}catch(e){}}
+function regenLives(){const now=Date.now();
+  if(lives.n>=LIFE_MAX){lives.t=now;return}
+  const k=Math.floor((now-lives.t)/LIFE_MS);
+  if(k>0){lives.n=Math.min(LIFE_MAX,lives.n+k);lives.t+=k*LIFE_MS;if(lives.n>=LIFE_MAX)lives.t=now;saveLives()}}
+const lifeWait=()=>lives.n>=LIFE_MAX?0:Math.max(0,lives.t+LIFE_MS-Date.now());
+const fmtT=ms=>{const x=Math.ceil(ms/1000);return Math.floor(x/60)+':'+String(x%60).padStart(2,'0')};
+function showLives(){regenLives();
+  document.getElementById('livesN').textContent=lives.n;
+  document.getElementById('livesT').textContent=lives.n>=LIFE_MAX?'':fmtT(lifeWait());
+  if(!document.getElementById('lifeOv').hidden)fillLives()}
+function takeLife(){
+  if(!S||S.lifeTaken||done.has(lvl))return true;
+  regenLives();
+  if(lives.n<=0){openLives(true);return false}
+  lives.n--;S.lifeTaken=true;saveLives();showLives();return true}
+function giveLifeBack(){if(S&&S.lifeTaken){S.lifeTaken=false;lives.n++;saveLives();showLives()}}
+let lifeNone=false;
+function fillLives(){
+  const can=coins>=LIFE_PRICE,full=lives.n>=LIFE_MAX;
+  document.getElementById('lifeH').textContent=lifeNone&&lives.n<=0?'Жизни закончились':'Жизни';
+  document.getElementById('hearts').innerHTML=[0,1,2,3,4].map(i=>HEART.replace('class="heart"',`class="heart${i<lives.n?'':' off'}"`)).join('')+(lives.n>LIFE_MAX?`<b>+${lives.n-LIFE_MAX}</b>`:'');
+  document.getElementById('lifeP').textContent=(full?'Жизни полные.':`Новая жизнь через ${fmtT(lifeWait())}.`)+' Жизнь тратится, если не пройти новый уровень; пройденные уровни переигрываются бесплатно.';
+  const b=document.getElementById('lifeBuy');b.innerHTML=`+5 жизней за ${LIFE_PRICE} монет`;b.disabled=!can;
+  const d=document.getElementById('lifeDucks');d.hidden=can||!window.Platform;
+  if(!d.hidden)d.innerHTML=`<img src="/img/duck.svg" alt="">Не хватает ${LIFE_PRICE-coins} — обменять уточки`;
+  document.getElementById('lifeClose').textContent=lifeNone&&lives.n<=0?'Подожду':'Закрыть'}
+function openLives(none){regenLives();lifeNone=!!none;fillLives();document.getElementById('lifeOv').hidden=false}
+document.getElementById('lives').onclick=()=>openLives(false);
+document.getElementById('lifeClose').onclick=()=>document.getElementById('lifeOv').hidden=true;
+document.getElementById('lifeBuy').onclick=()=>{if(!spend(LIFE_PRICE))return;
+  lives.n+=5;saveLives();showLives();document.getElementById('lifeOv').hidden=true;if(S){say('+5 жизней');S.msgT=2}};
+document.getElementById('lifeDucks').onclick=()=>buyCoins(LIFE_PRICE-coins,fillLives);
+setInterval(showLives,1000);
+
+/* ---------- монеты за уточки (платформа «Мой маленький мир», курс задаёт сервер) ----------
+   Уточки списывает сервер; монеты зачисляет игра и запоминает номер обмена в hm_xids — без дублей и потерь. */
+let xids=[];try{xids=JSON.parse(localStorage.getItem('hm_xids')||'[]')}catch(e){}
+function creditCoins(id,n){if(!id||xids.includes(id))return false;xids.push(id);
+  try{localStorage.setItem('hm_xids',JSON.stringify(xids))}catch(e){}earn(n);return true}
+function buyCoins(need,after){
+  if(!window.Platform)return false;
+  Platform.buyCoins({need:Math.max(0,need)}).then(r=>{
+    if(r&&creditCoins(r.id,r.coins)&&S){say(`+${r.coins} монет за уточки`);S.msgT=2.5}
+    if(after)after()});
+  return true}
+function applyCredits(){if(!window.Platform||!Platform.user())return;
+  try{xids=JSON.parse(localStorage.getItem('hm_xids')||'[]')}catch(e){}
+  Platform.credits().then(list=>{let got=0;list.forEach(c=>{if(creditCoins(c.id,c.coins))got+=c.coins});
+    if(got&&S){say(`+${got} монет за уточки`);S.msgT=3}}).catch(()=>{})}
+if(window.Platform){Platform.ready.then(u=>{if(u)setTimeout(applyCredits,800)});Platform.onChange(u=>{if(u)setTimeout(applyCredits,800)})}
+
 /* ---------- монеты, подсказка, ножницы ---------- */
 function earn(n){coins+=n;save();showCoins(true)}
 function spend(n){if(coins<n)return false;coins-=n;save();showCoins(true);return true}
-function poor(n,what){say(`${what} стоит ${n}, у тебя ${coins}. За каждый новый уровень +${PRIZE}`);S.msgT=3}
+function poor(n,what){say(`${what} стоит ${n}, у тебя ${coins}. За каждый новый уровень +${PRIZE}`);S.msgT=3;buyCoins(n-coins)}
 // Состояние модели из текущей партии: поле и обойма как в игре, колонки — что в них осталось.
 function liveState(){const sm=S.sim;
   return{n:sm.n,S:sm.S,g:sm.g.map(r=>r.slice()),rem:sm.rem,q:sm.q||0,
@@ -396,6 +483,8 @@ function applyGrants(u){const n=u&&GRANTS[(u.username||'').toLowerCase()];if(!n)
   earn(n);if(S){say(`Подарок для ${u.username}: +${n} монет`);S.msgT=4}}
 if(typeof window!=='undefined'&&window.Platform){Platform.ready.then(applyGrants);Platform.onChange(applyGrants)}
 document.getElementById('btnCut').onclick=()=>{if(S&&S.state==='play')toggleCut(!S.cutMode)};
+if(window.Platform){const c=document.getElementById('coins');c.classList.add('ex');c.title='Монеты · нажми, чтобы обменять уточки';c.setAttribute('role','button');c.tabIndex=0;
+  c.onclick=()=>buyCoins(0);c.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();buyCoins(0)}}}
 
 function cardAt(px,py,depth){for(let ci=0;ci<S.colsN;ci++)for(let k=0;k<Math.min(depth,S.cols[ci].length);k++){const b=S.cols[ci][k];
   if(Math.abs(px-b.tx)<b.tw/2&&Math.abs(py-b.ty)<b.th/2)return b}return null}
@@ -412,6 +501,7 @@ function tap(px,py){
         if(free<2){S.shake=.35;S.hl=b.link;S.hlT=1.4;say(`Для пары №${b.link+1} нужно 2 свободных места`);return}
         take=[ci,pj]}
       else if(!free){S.shake=.35;say('Обойма заполнена');return}
+      if(!takeLife())return;
       S.undo.push(snapshot());if(S.undo.length>30)S.undo.shift();
       for(const cj of take){const o=S.cols[cj].shift(),si=S.slots.indexOf(null);S.slots[si]=o;const g=slotGeom(si);
         o.tx=g.x;o.ty=g.y;o.tw=g.w;o.th=54;o.ta=1;o.link=-1;
@@ -447,14 +537,14 @@ function update(dt){
     h.x+=dx/d*sp*dt;h.y+=dy/d*sp*dt;return true});
   S.puffs=S.puffs.filter(p=>{p.life-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;return p.life>0});
   if(S.state==='play'){
-    if(S.eaten===S.total&&!S.ham.length){S.state='win';S.prize=done.has(lvl)?0:PRIZE;done.add(lvl);if(S.prize)earn(S.prize);save();setTimeout(()=>showOv(true),450)}
+    if(S.eaten===S.total&&!S.ham.length){giveLifeBack();S.state='win';S.prize=done.has(lvl)?0:PRIZE;done.add(lvl);if(S.prize)earn(S.prize);save();setTimeout(()=>showOv(true),450)}
     else if(!S.ham.length&&S.slots.every(b=>!b||b.idle)&&!liveMoves().length){S.stuck+=dt;if(S.stuck>.8){S.state='lose';showOv(false)}}
     else S.stuck=0}
 }
 
 function showOv(win){
   document.getElementById('ovT').textContent=win?'Картинка разобрана!':'Обойма забита';
-  document.getElementById('ovP').textContent=win?`Хомяки утащили все ${S.total} пикселей.`:'Хомяки в обойме не могут добраться до своего цвета, а новую норку взять нельзя. Попробуй другой порядок.';
+  document.getElementById('ovP').textContent=win?`Хомяки утащили все ${S.total} пикселей.`:'Хомяки в обойме не могут добраться до своего цвета, а новую норку взять нельзя. Попробуй другой порядок.'+(S.lifeTaken?` Жизней осталось: ${lives.n}.`:'');
   document.getElementById('ovNext').hidden=!win||lvl>=99;
   document.getElementById('ovUndo').hidden=win||!S.undo.length;
   document.getElementById('ovPrize').hidden=!(win&&S.prize);
@@ -588,7 +678,7 @@ function resize(){
 addEventListener('resize',resize);
 cv.addEventListener('pointerdown',e=>{const r=cv.getBoundingClientRect();tap((e.clientX-r.left)/r.width*W,(e.clientY-r.top)/r.height*H)});
 function frame(ts){const dt=Math.min(.05,(ts-last)/1000||0);last=ts;time+=dt;update(dt);draw();requestAnimationFrame(frame)}
-load(lvl);resize();requestAnimationFrame(frame);
+load(lvl);showLives();resize();requestAnimationFrame(frame);
 </script>
 </body>
 </html>
