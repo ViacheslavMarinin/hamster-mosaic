@@ -129,6 +129,7 @@ button:disabled{opacity:.5;cursor:default}
     <div class="card">
       <h2 id="ovT"></h2>
       <p id="ovP"></p>
+      <p class="legend" id="ovPrizeNote"></p>
       <p class="prize" id="ovPrize" hidden><svg class="coin" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="hmcoin4" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff3a8"/><stop offset=".55" stop-color="#ffc936"/><stop offset="1" stop-color="#e89a10"/></radialGradient></defs><circle cx="12" cy="12.8" r="9.5" fill="#c98a12"/><circle cx="12" cy="11.6" r="9.5" fill="url(#hmcoin4)" stroke="#a86e08" stroke-width="1.2"/><circle cx="12" cy="11.6" r="6.6" fill="none" stroke="#fff3b0" stroke-width="1.1" opacity=".8"/><path d="M12 7.2l1.3 2.7 2.9.4-2.1 2 .5 2.9-2.6-1.4-2.6 1.4.5-2.9-2.1-2 2.9-.4Z" fill="#fff3b0"/></svg><b>+20</b> монет</p>
       <div class="row"><button id="ovRetry">Заново</button><button id="ovUndo" class="on">Отменить ход · 200</button><button id="ovNext" class="on">Дальше</button></div>
       <a class="backlink" href="https://mlymir.ru/">Вернуться в «Мой маленький мир»</a>
@@ -156,7 +157,7 @@ button:disabled{opacity:.5;cursor:default}
   <div class="overlay" id="lv" hidden>
     <div class="card lvcard">
       <h2>100 уровней</h2>
-      <p class="legend">Хомяки грызут снизу вверх. С 7-го уровня — связанные норки, их берут парой. С 12-го — скрытые норки «?», цвет виден только наверху</p>
+      <p class="legend">Хомяки грызут снизу вверх. С 7-го уровня — связанные норки, их берут парой. С 12-го — скрытые норки «?». Дальше на поле: сундучки (9), лёд (14), камни (20), двухслойные пиксели (26)</p>
       <div id="lvGrid"></div>
       <div class="row"><button id="lvClose">Закрыть</button></div>
       <a class="backlink" href="https://mlymir.ru/">Вернуться в «Мой маленький мир»</a>
@@ -166,7 +167,7 @@ button:disabled{opacity:.5;cursor:default}
 
 <script src="/sdk/v1.js" data-app="hamsters"></script>
 <script>
-const LEVEL_SEEDS=[[74,4],[0,4],[0,4],[0,3],[0,3],[30,3],[15,3],[24,3],[114,3],[58,3],[116,3],[40,3],[115,3],[18,3],[70,3],[75,3],[109,3],[0,3],[111,3],[34,3],[72,3],[72,3],[116,3],[95,3],[73,3],[108,3],[18,3],[30,3],[33,3],[89,3],[40,3],[18,3],[82,3],[115,3],[84,3],[110,3],[77,3],[50,3],[118,3],[94,3],[26,3],[52,3],[7,3],[55,3],[16,3],[25,3],[41,3],[2,3],[2,3],[15,3],[20,3],[38,3],[67,3],[5,3],[29,3],[3,3],[44,3],[3,3],[66,3],[57,3],[9,3],[27,3],[13,3],[4,3],[14,3],[42,3],[0,3],[36,3],[30,3],[9,4],[55,3],[0,3],[6,3],[33,3],[1,4],[20,3],[42,3],[7,3],[55,3],[24,3],[0,3],[18,3],[4,4],[64,3],[0,3],[56,3],[50,3],[4,3],[2,3],[3,3],[43,3],[48,3],[44,3],[26,3],[57,3],[25,3],[13,3],[1,3],[22,4],[1,4]];
+const LEVEL_SEEDS=[[74,4],[0,4],[0,4],[0,3],[0,3],[64,3],[82,3],[24,3],[63,3],[58,3],[116,3],[40,3],[115,3],[90,3],[102,3],[55,3],[34,3],[88,3],[96,3],[6,3],[101,3],[44,3],[49,3],[23,3],[108,3],[91,3],[40,3],[93,3],[31,3],[23,3],[3,3],[7,3],[89,3],[65,3],[25,3],[14,3],[22,3],[33,3],[32,3],[47,3],[35,3],[11,3],[63,3],[79,3],[14,3],[4,3],[27,3],[16,3],[49,3],[77,3],[113,3],[72,3],[79,3],[72,3],[84,3],[0,3],[0,3],[5,3],[54,3],[5,3],[48,3],[97,3],[30,3],[59,3],[0,3],[12,3],[26,3],[47,3],[39,3],[40,3],[2,4],[11,3],[4,3],[61,3],[17,4],[28,3],[52,3],[1,3],[101,3],[15,3],[68,4],[0,3],[95,3],[0,3],[82,3],[55,3],[50,3],[16,3],[12,3],[0,3],[54,3],[69,3],[8,3],[119,3],[0,4],[0,3],[50,3],[0,3],[0,4],[43,4]];
 /*GEN*/
 function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 function shuf(a,r){for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
@@ -201,22 +202,36 @@ const spamTarget=i=>.75*Math.exp(-i/9)+.03;
 /* ---- simulation shared by level design and the game's rules ---- */
 function slotBX(si,S,n){const sw=Math.min(62,(350-8*(S-1))/S),x0=(390-(S*sw+(S-1)*8))/2;return(x0+sw/2+si*(sw+8)-35)/320*n-.5}
 function accG(g,n,x,y){return y===n-1||(y>0&&g[y-1][x]===null)||g[y+1][x]===null||(x>0&&g[y][x-1]===null)||(x<n-1&&g[y][x+1]===null)}
-function simNew(g0,deal,S){const n=g0.length;return{n,S,deal,g:g0.map(r=>r.slice()),rem:n*n,ptr:deal.map(()=>0),slots:Array(S).fill(null)}}
-function simClone(st){return{...st,g:st.g.map(r=>r.slice()),ptr:st.ptr.slice(),slots:st.slots.map(b=>b&&{...b})}}
-function settle(st,onEat){const{g,n}=st;let p=true;
+// Клетка поля: цвет (0..), null — пусто, STONE — камень. Слои: ice[y][x]=1 — лёд (нужен лишний удар), under[y][x]>=0 — цвет под верхним слоем.
+const STONE=-1;
+function totalHits(g,ice,under){let t=0;const n=g.length;for(let y=0;y<n;y++)for(let x=0;x<n;x++){const c=g[y][x];if(c===null||c===STONE)continue;t++;if(ice&&ice[y][x])t++;if(under&&under[y][x]>=0)t++}return t}
+function simNew(g0,deal,S){const n=g0.length;return{n,S,deal,g:g0.map(r=>r.slice()),ice:g0.ice?g0.ice.map(r=>r.slice()):null,under:g0.under?g0.under.map(r=>r.slice()):null,
+  stones:!!g0.stones,rem:totalHits(g0,g0.ice,g0.under),ptr:deal.map(()=>0),slots:Array(S).fill(null)}}
+function simClone(st){return{...st,g:st.g.map(r=>r.slice()),ice:st.ice&&st.ice.map(r=>r.slice()),under:st.under&&st.under.map(r=>r.slice()),ptr:st.ptr.slice(),slots:st.slots.map(b=>b&&{...b})}}
+// Удар хомяка по клетке: лёд раскалывается, верхний слой открывает нижний, иначе пиксель уходит.
+function hitCell(st,x,y){const{g}=st;if(st.ice&&st.ice[y][x]){st.ice[y][x]=0;return}if(st.under&&st.under[y][x]>=0){g[y][x]=st.under[y][x];st.under[y][x]=-1;return}g[y][x]=null}
+// Камень рассыпается, когда с двух сторон пусто (низ поля считается пустотой).
+function stoneOpen(g,n,x,y){return(y===n-1||g[y+1][x]===null)+(y>0&&g[y-1][x]===null)+(x>0&&g[y][x-1]===null)+(x<n-1&&g[y][x+1]===null)}
+function breakStones(st,onBreak){const{g,n}=st;let any=false,p=true;
+  while(p){p=false;for(let y=0;y<n;y++)for(let x=0;x<n;x++)if(g[y][x]===STONE&&stoneOpen(g,n,x,y)>=2){g[y][x]=null;p=any=true;if(onBreak)onBreak(x,y)}}
+  return any}
+function cellHash(st){let h=2166136261;const{g,n}=st;for(let y=0;y<n;y++)for(let x=0;x<n;x++){const c=g[y][x];
+  h=Math.imul(h^(c===null?255:c+2),16777619);if(st.ice)h=Math.imul(h^st.ice[y][x],16777619);if(st.under)h=Math.imul(h^(st.under[y][x]+3),16777619)}return h>>>0}
+function settle(st,onEat,onBreak){const{g,n}=st;let p=true;if(st.stones)breakStones(st,onBreak);
   // Норки едят в порядке, в котором их поставили (q), а не по номеру слота: так модель не зависит от того, в какой слот норка встала.
   const order=st.slots.filter(Boolean).sort((a,c)=>a.q-c.q);
   while(p){p=false;for(const b of order){if(!b.left)continue;const l=[];
     for(let y=0;y<n;y++)for(let x=0;x<n;x++)if(g[y][x]===b.c&&accG(g,n,x,y))l.push([x,y]);
     if(!l.length)continue;l.sort((a,c)=>c[1]-a[1]||a[0]-c[0]);
-    for(const[x,y]of l){if(!b.left)break;g[y][x]=null;b.left--;st.rem--;p=true;if(onEat)onEat(b,x,y)}}}
+    for(const[x,y]of l){if(!b.left)break;hitCell(st,x,y);b.left--;st.rem--;p=true;if(onEat)onEat(b,x,y)}}
+    if(st.stones&&breakStones(st,onBreak))p=true}
   st.slots=st.slots.map(b=>b&&b.left?b:null)}
 function moves(tops,free){const out=[];tops.forEach((b,ci)=>{if(!b)return;
   if(b.link<0){if(free>=1)out.push([ci]);return}
   const pj=tops.findIndex((o,cj)=>cj!==ci&&o&&o.link===b.link);if(pj>=0&&free>=2&&ci<pj)out.push([ci,pj])});return out}
 function simMoves(st){return moves(st.deal.map((c,ci)=>c[st.ptr[ci]]||null),st.slots.filter(s=>!s).length)}
 function simApply(st,mv){for(const ci of mv){const b=st.deal[ci][st.ptr[ci]++],si=st.slots.indexOf(null);st.slots[si]={c:b.c,left:b.left,q:st.q=(st.q||0)+1}}}
-function accCounts(st){const ac={},{g,n}=st;for(let y=0;y<n;y++)for(let x=0;x<n;x++){const c=g[y][x];if(c!==null&&accG(g,n,x,y))ac[c]=(ac[c]||0)+1}return ac}
+function accCounts(st){const ac={},{g,n}=st;for(let y=0;y<n;y++)for(let x=0;x<n;x++){const c=g[y][x];if(c!==null&&c!==STONE&&accG(g,n,x,y))ac[c]=(ac[c]||0)+1}return ac}
 function heur(st,mv,ac){let s=0;for(const ci of mv){const b=st.deal[ci][st.ptr[ci]],a=ac[b.c]||0,dup=st.slots.some(o=>o&&o.c===b.c);
   s+=a>0?1000+Math.min(a,b.left)-(dup?500:0):-50*(dup?1:0)-(st.deal[ci].length-st.ptr[ci])}return s/mv.length}
 function runPolicy(g,deal,S,mode,rng){const st=simNew(g,deal,S);
@@ -226,7 +241,7 @@ function runPolicy(g,deal,S,mode,rng){const st=simNew(g,deal,S);
     simApply(st,best)}return false}
 function dfsSolve(g,deal,S,limit){let nodes=0;const seen=new Set();
   const rec=st=>{if(++nodes>limit)return null;settle(st);if(!st.rem)return true;
-    const key=st.ptr.join(',')+'|'+st.slots.map(b=>b?b.c+':'+b.left:'').sort().join(',');if(seen.has(key))return false;seen.add(key);
+    const key=st.ptr.join(',')+'|'+st.slots.filter(Boolean).sort((a,b)=>a.q-b.q).map(b=>b.c+':'+b.left).join(',')+'|'+cellHash(st);if(seen.has(key))return false;seen.add(key);
     const mv=simMoves(st),ac=accCounts(st);mv.sort((a,b)=>heur(st,b,ac)-heur(st,a,ac));
     for(const m of mv){const s2=simClone(st);simApply(s2,m);const r=rec(s2);if(r)return true;if(r===null)return null}return false};
   const r=rec(simNew(g,deal,S));return{ok:r===true,nodes}}
@@ -234,7 +249,11 @@ function greedyWins(g,deal,S,seed){let w=runPolicy(g,deal,S,'smart')?1:0;const r
 function spamRate(g,deal,S,runs,seed){const r=mulberry(seed);let w=0;for(let k=0;k<runs;k++)if(runPolicy(g,deal,S,'spam',r))w++;return w/runs}
 const linkP=i=>i<6?0:Math.min(.4,.12+(i-6)*.01);
 const hiddenP=i=>i<11?0:Math.min(.45,.18+(i-11)*.006);
-const preloadP=i=>i<4?0:Math.min(.45,.1+i*.006);
+const preloadP=i=>i<4?0:Math.min(.2,.1+i*.003);
+const iceP=i=>i<13?0:Math.min(.16,.05+(i-13)*.0025);
+const stoneP=i=>i<19?0:Math.min(.045,.015+(i-19)*.0006);
+const layerP=i=>i<25?0:Math.min(.6,.2+(i-25)*.006);
+const chestN=i=>i<8?0:i<30?1:i<60?2:3;
 const obvTarget=i=>i<3?1:Math.max(0,.75-i*.04);
 const LCACHE={};
 function makeLevel(i){
@@ -258,7 +277,21 @@ function makeLevel(i){
   const colOf=k=>k==='o'?OUT:k[0]==='b'?bgC[+k.slice(1)]:mC[+k.slice(1)-1];
   const used=[...new Set(keys.flat())],pal=used.map(colOf),idx=Object.fromEntries(used.map((k,j)=>[k,j]));
   const grid=keys.map(r=>r.map(k=>idx[k]));
-  const counts=pal.map(()=>0);grid.flat().forEach(c=>counts[c]++);
+  // Механики поля: своя последовательность случайных чисел, чтобы не сдвигать остальное.
+  const fr=mulberry(9001+i*577),ice=grid.map(r=>r.map(()=>0)),under=grid.map(r=>r.map(()=>-1));
+  const isBg=(x,y)=>keys[y][x][0]==='b',isMotif=(x,y)=>keys[y][x][0]==='m';
+  if(stoneP(i)){let want=Math.round(n*n*stoneP(i)),guard=0;
+    while(want>0&&guard++<5000){const x=Math.floor(fr()*n),y=Math.floor(fr()*(n-1));if(!isBg(x,y)||grid[y][x]===STONE)continue;
+      grid[y][x]=STONE;want--;const k=Math.floor(fr()*3);
+      for(let j=0;j<k&&want>0;j++){const[dx,dy]=[[1,0],[-1,0],[0,-1]][Math.floor(fr()*3)],xx=x+dx,yy=y+dy;
+        if(xx>=0&&xx<n&&yy>=0&&yy<n-1&&isBg(xx,yy)&&grid[yy][xx]!==STONE){grid[yy][xx]=STONE;want--}}}}
+  if(layerP(i)){const bgCount={};for(let y=0;y<n;y++)for(let x=0;x<n;x++)if(isBg(x,y)&&grid[y][x]!==STONE)bgCount[grid[y][x]]=(bgCount[grid[y][x]]||0)+1;
+    const top=+Object.entries(bgCount).sort((a,b)=>b[1]-a[1])[0][0];
+    for(let y=0;y<n;y++)for(let x=0;x<n;x++)if(isMotif(x,y)&&fr()<layerP(i)){under[y][x]=grid[y][x];grid[y][x]=top}}
+  if(iceP(i))for(let y=0;y<n;y++)for(let x=0;x<n;x++)if(grid[y][x]!==STONE&&under[y][x]<0&&fr()<iceP(i))ice[y][x]=1;
+  grid.ice=ice;grid.under=under;grid.stones=grid.some(r=>r.includes(STONE));
+  const counts=pal.map(()=>0);
+  for(let y=0;y<n;y++)for(let x=0;x<n;x++){const c=grid[y][x];if(c===STONE)continue;counts[c]+=1+ice[y][x];if(under[y][x]>=0)counts[under[y][x]]++}
   const cap=Math.max(5,Math.round(n*n/(10+i*.3)));
   const bur=[];counts.forEach((cnt,c)=>{let m=cnt;while(m>0){let k=Math.max(4,Math.round(cap*(.6+rng()*.8)));if(m-k>0&&m-k<4)k=m;k=Math.min(k,m);bur.push({c,left:k});m-=k}});
   // Build a deal backwards from a valid play order, so every level has a guaranteed solution.
@@ -285,7 +318,16 @@ function makeLevel(i){
   for(let s=0;!deal;s++){tries++;if(s%40==39)p.slots=++slots;deal=mkDeal(s)}
   // Hidden burrows: colour unknown until the burrow reaches the top of its column. Separate RNG, deal untouched.
   const rh=mulberry(5003+i*389);deal.forEach(col=>col.forEach((o,k)=>{o.hidden=k>0&&rh()<hiddenP(i)}));
-  return LCACHE[i]={i,name:M.name,n,pal,grid,deal,slots,cols:p.cols,total:n*n,tries};
+  // Сундучки: клетки, которые в эталонном решении съедаются посередине партии; срок — тот же ход + 1.
+  const chests=[];
+  if(chestN(i)){const st=simNew(grid,deal,slots),when={};let step=0;
+    for(const mv of deal.order){settle(st);simApply(st,mv);step++;settle(st);
+      for(let y=0;y<n;y++)for(let x=0;x<n;x++)if(st.g[y][x]===null&&grid[y][x]!==STONE&&when[y*n+x]===undefined)when[y*n+x]=step}
+    const total=deal.order.length,cand=Object.entries(when).filter(([k,s])=>s>=3&&s<=total-2);
+    const cr=mulberry(31337+i*101);shuf(cand,cr);
+    for(const[k,s]of cand){if(chests.length>=chestN(i))break;const x=k%n,y=Math.floor(k/n);
+      if(chests.some(c=>Math.abs(c.x-x)+Math.abs(c.y-y)<3))continue;chests.push({x,y,dl:s+1})}}
+  return LCACHE[i]={i,name:M.name,n,pal,grid,deal,slots,cols:p.cols,total:totalHits(grid,grid.ice,grid.under),chests,tries};
 }
 /*ENDGEN*/
 /* ---------- game ---------- */
@@ -321,12 +363,22 @@ function load(i){
      cell:BOARD/n,BX:(W-BOARD)/2,BY:58,state:'play',stuck:0,shake:0};
   // The game follows the same model the levels were checked with: when a burrow lands in the clip,
   // the model decides at once which pixels its hamsters will take, and the animation plays that plan.
-  S.sim={n,S:L.slots,g:L.grid.map(r=>r.slice()),rem:n*n,slots:Array(L.slots).fill(null)};
+  S.sim=simNew(L.grid,[],L.slots);delete S.sim.deal;delete S.sim.ptr;
+  // Видимое поле отстаёт от модели: лёд/слои и счётчики ударов по клетке (ph — запланировано, vh — уже сделано).
+  S.vice=L.grid.ice.map(r=>r.slice());S.vunder=L.grid.under.map(r=>r.slice());
+  S.ph=grid.map(r=>r.map(()=>0));S.vh=grid.map(r=>r.map(()=>0));
+  S.moves=0;S.chestGot=0;S.pops=[];S.known=L.deal.order.map(m=>m.slice());S.chests=done.has(i)?[]:L.chests.map(c=>({...c,got:false,gone:false,pop:0}));
   S.cols=L.deal.map((col,ci)=>col.map((o,k)=>{const g=colGeom(ci),w=g.w-8;
     return{c:o.c,left:o.left,link:o.link,hidden:o.hidden,flip:0,out:0,cd:0,queue:[],x:g.x,tx:g.x,y:cardY(k),ty:cardY(k),w,tw:w,h:54,th:54,a:k<3?1:0,ta:k<3?1:0}}));
   S.hint=null;S.cutMode=false;S.undo=[];document.getElementById('btnCut').classList.remove('active');
   document.getElementById('ov').hidden=true;document.getElementById('lv').hidden=true;document.getElementById('buy').hidden=true;document.getElementById('lifeOv').hidden=true;showCoins();
   if(S.cols.flat().some(o=>o.hidden)&&!done.has(i)&&i===LEVELS_FIRST_HIDDEN())setTimeout(()=>say('Норки «?» откроются, когда поднимутся наверх'),600);
+  const first=f=>{for(let k=0;k<100;k++)if(f(k))return k;return -1};
+  const intro=i===first(k=>chestN(k)>0)?'Сундучок: доберись до него, пока не кончились ходы на нём — +'+CHEST_COINS+' монет':
+    i===first(k=>iceP(k)>0)?'Лёд: первый хомяк раскалывает его, второй забирает пиксель':
+    i===first(k=>stoneP(k)>0)?'Камень не едят. Он рассыпается, когда с двух сторон пусто':
+    i===first(k=>layerP(k)>0)?'Пиксель с квадратиком внутри — двухслойный: под ним другой цвет':'';
+  if(intro&&!done.has(i))setTimeout(()=>{say(intro);S.msgT=5},700);
   document.getElementById('sub').textContent=`Уровень ${i+1} · ${L.name} · ${L.pal.length} цв. · ${n}×${n} · обойма ${L.slots}`;
 }
 
@@ -334,7 +386,11 @@ function accessible(x,y){const g=S.grid,n=S.n;
   if(y===n-1)return true;
   return (y>0&&g[y-1][x]===null)||g[y+1][x]===null||(x>0&&g[y][x-1]===null)||(x<n-1&&g[y][x+1]===null)}
 function cellC(x,y){return{cx:S.BX+(x+.5)*S.cell,cy:S.BY+(y+.5)*S.cell}}
-function plan(){settle(S.sim,(m,x,y)=>m.ref.queue.push({x,y}))}
+function plan(){settle(S.sim,(m,x,y)=>m.ref.queue.push({x,y,h:S.ph[y][x]++}))}
+const CHEST_COINS=10;
+// Сундучки: забран, если пиксель под ним съеден моделью не позже срока; иначе после срока исчезает.
+function updateChests(){for(const c of S.chests){if(c.got||c.gone)continue;
+  if(S.sim.g[c.y][c.x]===null&&S.moves<=c.dl){c.got=true;S.chestGot++}else if(S.moves>=c.dl)c.gone=true}}
 function LEVELS_FIRST_HIDDEN(){for(let k=0;k<100;k++)if(hiddenP(k)>0)return k;return -1}
 function liveMoves(){return moves(S.cols.map(c=>c[0]||null),S.slots.filter(s=>!s).length)}
 function say(t){S.msg=t;S.msgT=1.8}
@@ -403,28 +459,30 @@ function spend(n){if(coins<n)return false;coins-=n;save();showCoins(true);return
 function poor(n,what){say(`${what} стоит ${n}, у тебя ${coins}. За каждый новый уровень +${PRIZE}`);S.msgT=3;buyCoins(n-coins)}
 // Состояние модели из текущей партии: поле и обойма как в игре, колонки — что в них осталось.
 function liveState(cols){const sm=S.sim;cols=cols||S.cols;
-  return{n:sm.n,S:sm.S,g:sm.g.map(r=>r.slice()),rem:sm.rem,q:sm.q||0,
+  return{n:sm.n,S:sm.S,g:sm.g.map(r=>r.slice()),ice:sm.ice&&sm.ice.map(r=>r.slice()),under:sm.under&&sm.under.map(r=>r.slice()),stones:sm.stones,rem:sm.rem,q:sm.q||0,
     slots:sm.slots.map(b=>b&&{c:b.c,left:b.left,q:b.q}),deal:cols.map(col=>col.map(o=>({c:o.c,left:o.left,link:o.link}))),ptr:cols.map(()=>0)}}
 // Ищет ход, после которого уровень ещё можно пройти. 'dead' — из этой позиции не пройти, null — не успел найти.
+// Проверяет, что запомненная линия ходов из текущей позиции всё ещё доводит до победы.
+function lineWins(st,line){st=simClone(st);for(const mv of line){settle(st);if(!simMoves(st).some(m=>m.length===mv.length&&m.every(x=>mv.includes(x))))return false;simApply(st,mv)}settle(st);return !st.rem}
 function findHint(st0,ms){
-  st0=st0||liveState();ms=ms||2500;let nodes=0,capped=false;const seen=new Set(),t0=performance.now();
-  const rec=st=>{if(++nodes>40000||performance.now()-t0>ms){capped=true;return null}
+  if(!st0&&S.known&&S.known.length&&lineWins(liveState(),S.known))return S.known[0];
+  const live=!st0;st0=st0||liveState();ms=ms||4000;let nodes=0,capped=false;const seen=new Set(),t0=performance.now();
+  const rec=st=>{if(++nodes>120000||performance.now()-t0>ms){capped=true;return null}
     settle(st);if(!st.rem)return[];
-    let gh=2166136261;for(const row of st.g)for(const c of row)gh=Math.imul(gh^(c===null?255:c),16777619);
-    const key=st.ptr.join(',')+'|'+st.slots.filter(Boolean).sort((a,b)=>a.q-b.q).map(b=>b.c+':'+b.left).join(',')+'|'+(gh>>>0);
+    const key=st.ptr.join(',')+'|'+st.slots.filter(Boolean).sort((a,b)=>a.q-b.q).map(b=>b.c+':'+b.left).join(',')+'|'+cellHash(st);
     if(seen.has(key))return false;seen.add(key);
     const mv=simMoves(st),ac=accCounts(st);mv.sort((a,b)=>heur(st,b,ac)-heur(st,a,ac));
     for(const m of mv){const s2=simClone(st);simApply(s2,m);const r=rec(s2);if(r)return[m,...r];if(r===null)return null}
     return false};
   const r=rec(simClone(st0));
-  if(r&&r.length)return r[0];
+  if(r&&r.length){if(live)S.known=r;return r[0]}
   if(r===false&&!capped)return'dead';
   // запасной путь: несколько быстрых «разумных» партий
   const rng=mulberry(Date.now()|0);
-  for(let k=0;k<(ms<1000?8:40);k++){const st=simClone(st0);let first=null;
-    for(let step=0;step<400;step++){settle(st);if(!st.rem)return first;const mv=simMoves(st);if(!mv.length)break;
+  for(let k=0;k<(ms<1000?8:40);k++){const st=simClone(st0);let first=null;const line=[];
+    for(let step=0;step<400;step++){settle(st);if(!st.rem){if(live&&line.length)S.known=line;return first}const mv=simMoves(st);if(!mv.length)break;
       const ac=accCounts(st);let best=null,bs=-1e9;for(const m of mv){const s=heur(st,m,ac)+rng()*(k?500:0);if(s>bs){bs=s;best=m}}
-      if(!first)first=best;simApply(st,best)}}
+      if(!first)first=best;line.push(best);simApply(st,best)}}
   return null}
 function askHint(){
   if(!S||S.state!=='play')return;
@@ -457,7 +515,8 @@ function cutLink(id){
   S.hint=null;toggleCut(false);say('Верёвка разрезана: норки теперь берутся по одной')}
 // Отмена хода: позиция возвращается к моменту перед последним ходом — как будто хомяки уже доели всё, что было до него.
 function snapshot(){const sm=S.sim;
-  return{g:sm.g.map(r=>r.slice()),rem:sm.rem,q:sm.q||0,
+  return{g:sm.g.map(r=>r.slice()),ice:sm.ice.map(r=>r.slice()),under:sm.under.map(r=>r.slice()),ph:S.ph.map(r=>r.slice()),
+    known:S.known,moves:S.moves,chestGot:S.chestGot,chests:S.chests.map(c=>({...c})),rem:sm.rem,q:sm.q||0,
     slots:sm.slots.map(b=>b&&{c:b.c,left:b.left,q:b.q,ref:b.ref}),
     cols:S.cols.map(col=>col.map(o=>({o,left:o.left,link:o.link,hidden:o.hidden})))}}
 function undoMove(){
@@ -466,8 +525,10 @@ function undoMove(){
   if(!S.undo.length){say('Нечего отменять — ходов ещё не было');return}
   if(!spend(PRICE_UNDO))return poor(PRICE_UNDO,'Отмена хода');
   const s=S.undo.pop();
-  S.sim={n:S.n,S:S.slotsN,g:s.g.map(r=>r.slice()),rem:s.rem,q:s.q,slots:s.slots.map(b=>b&&{c:b.c,left:b.left,q:b.q,ref:b.ref})};
-  S.grid=s.g.map(r=>r.slice());S.res=S.grid.map(r=>r.map(()=>0));S.eaten=S.total-s.rem;S.ham=[];
+  S.sim={n:S.n,S:S.slotsN,g:s.g.map(r=>r.slice()),ice:s.ice.map(r=>r.slice()),under:s.under.map(r=>r.slice()),stones:S.sim.stones,rem:s.rem,q:s.q,slots:s.slots.map(b=>b&&{c:b.c,left:b.left,q:b.q,ref:b.ref})};
+  S.grid=s.g.map(r=>r.slice());S.vice=s.ice.map(r=>r.slice());S.vunder=s.under.map(r=>r.slice());
+  S.ph=s.ph.map(r=>r.slice());S.vh=s.ph.map(r=>r.slice());S.known=s.known;S.moves=s.moves;S.chestGot=s.chestGot;S.chests=s.chests.map(c=>({...c}));
+  S.res=S.grid.map(r=>r.map(()=>0));S.eaten=S.total-s.rem;S.ham=[];S.pops=[];
   S.slots=s.slots.map((b,i)=>{if(!b)return null;const o=b.ref,g=slotGeom(i);
     Object.assign(o,{left:b.left,queue:[],out:0,cd:0,idle:false,link:-1,hidden:false,tx:g.x,ty:g.y,tw:g.w,th:54,ta:1});return o});
   S.cols=s.cols.map((col,ci)=>col.map((e,k)=>{const o=e.o,g=colGeom(ci);
@@ -501,7 +562,7 @@ function placeSeq(seq,lens,rng){
   // проверка: этот порядок действительно проходит из текущей позиции
   const t=liveState(cols);
   for(const mv of order){settle(t);if(!simMoves(t).some(m=>m.length===mv.length&&m.every(x=>mv.includes(x))))return null;simApply(t,mv)}
-  settle(t);return t.rem?null:cols}
+  settle(t);if(t.rem)return null;cols.order=order;return cols}
 function shuffleBurrows(){
   if(!S||S.state!=='play')return;
   if(S.cutMode)toggleCut(false);
@@ -514,7 +575,7 @@ function shuffleBurrows(){
   const cols=pick;
   if(!cols){say('Не нашлось удачной раскладки — монеты не списаны');S.msgT=3;return}
   spend(PRICE_SHUF);
-  S.cols=cols;
+  S.known=cols.order;S.cols=cols;
   S.cols.forEach((col,ci)=>{const g=colGeom(ci);col.forEach((o,k)=>{o.tx=g.x;o.ty=cardY(k);o.ta=k<3?1:0;o.flip=0;
     if(k===0&&o.hidden){o.hidden=false;o.flip=1}})});
   S.undo=[];S.hint=null;say('Норки перемешаны. Отменить ходы до этого уже нельзя');S.msgT=3}
@@ -549,14 +610,26 @@ function tap(px,py){
       else if(!free){S.shake=.35;say('Обойма заполнена');return}
       if(!takeLife())return;
       S.undo.push(snapshot());if(S.undo.length>30)S.undo.shift();
+      const k0=S.known&&S.known[0];S.known=k0&&k0.length===take.length&&k0.every(c=>take.includes(c))?S.known.slice(1):null;
       for(const cj of take){const o=S.cols[cj].shift(),si=S.slots.indexOf(null);S.slots[si]=o;const g=slotGeom(si);
         o.tx=g.x;o.ty=g.y;o.tw=g.w;o.th=54;o.ta=1;o.link=-1;
         S.cols[cj].forEach((q,k)=>{q.ty=cardY(k);q.ta=k<3?1:0});
         const nt=S.cols[cj][0];if(nt&&nt.hidden){nt.hidden=false;nt.flip=1}
         S.sim.slots[si]={c:o.c,left:o.left,ref:o,q:S.sim.q=(S.sim.q||0)+1}}
-      S.hint=null;plan();return}}
+      S.hint=null;S.moves++;plan();updateChests();return}}
 }
 
+// Удар хомяка по видимому полю — те же правила, что в модели.
+function visHit(x,y,c){const{cx,cy}=cellC(x,y);let col=S.L.pal[c],n=4;
+  if(S.vice[y][x]){S.vice[y][x]=0;col='#e8f6ff';n=6}
+  else if(S.vunder[y][x]>=0){S.grid[y][x]=S.vunder[y][x];S.vunder[y][x]=-1}
+  else S.grid[y][x]=null;
+  S.vh[y][x]++;
+  for(let k=0;k<n;k++)S.puffs.push({x:cx,y:cy,vx:(Math.random()-.5)*90,vy:(Math.random()-.5)*90,life:.35,c:col});
+  if(S.grid[y][x]===null){
+    if(S.sim.stones)breakStones({g:S.grid,n:S.n},(sx,sy)=>{const p=cellC(sx,sy);for(let k=0;k<7;k++)S.puffs.push({x:p.cx,y:p.cy,vx:(Math.random()-.5)*120,vy:(Math.random()-.5)*120,life:.45,c:'#8f8a84'})});
+    const ch=S.chests.find(o=>o.x===x&&o.y===y&&o.got&&!o.pop);
+    if(ch){ch.pop=1;S.pops.push({x:cx,y:cy,t:1.1,txt:'+'+CHEST_COINS})}}}
 function update(dt){
   const f=Math.min(1,dt*14),fa=Math.min(1,dt*10);
   S.cols.flat().concat(S.slots.filter(Boolean)).forEach(b=>{
@@ -566,7 +639,7 @@ function update(dt){
     const arrived=Math.abs(b.x-b.tx)<2&&Math.abs(b.y-b.ty)<2;b.idle=false;
     if(arrived&&b.queue.length){b.cd-=dt;
       const q=b.queue[0];
-      if(b.cd<=0&&accessible(q.x,q.y)){b.queue.shift();const t={x:q.x,y:q.y,...cellC(q.x,q.y)};
+      if(b.cd<=0&&S.vh[q.y][q.x]===q.h&&accessible(q.x,q.y)){b.queue.shift();const t={x:q.x,y:q.y,...cellC(q.x,q.y)};
         S.res[t.y][t.x]=1;b.left--;b.out++;b.cd=.09;
         S.ham.push({x:b.x+(Math.random()-.5)*b.w*.4,y:b.y-18,t,b,back:false,ph:Math.random()*6,dir:1})}}
     b.idle=b.left>0&&!b.queue.length;
@@ -576,24 +649,25 @@ function update(dt){
     const tx=h.back?h.b.x:h.t.cx,ty=h.back?h.b.y-14:h.t.cy,dx=tx-h.x,dy=ty-h.y,d=Math.hypot(dx,dy);h.ph+=dt*28;
     if(Math.abs(dx)>1)h.dir=dx>0?1:-1;
     if(d<sp*dt){
-      if(!h.back){S.grid[h.t.y][h.t.x]=null;S.res[h.t.y][h.t.x]=0;S.eaten++;h.back=true;
-        for(let k=0;k<4;k++)S.puffs.push({x:h.t.cx,y:h.t.cy,vx:(Math.random()-.5)*90,vy:(Math.random()-.5)*90,life:.35,c:S.L.pal[h.b.c]});
-        return true}
+      if(!h.back){visHit(h.t.x,h.t.y,h.b.c);S.res[h.t.y][h.t.x]=0;S.eaten++;h.back=true;return true}
       h.b.out--;return false}
     h.x+=dx/d*sp*dt;h.y+=dy/d*sp*dt;return true});
   S.puffs=S.puffs.filter(p=>{p.life-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;return p.life>0});
+  S.pops=S.pops.filter(p=>(p.t-=dt)>0);
   if(S.state==='play'){
-    if(S.eaten===S.total&&!S.ham.length){giveLifeBack();S.state='win';S.prize=done.has(lvl)?0:PRIZE;done.add(lvl);if(S.prize)earn(S.prize);save();setTimeout(()=>showOv(true),450)}
+    if(S.eaten===S.total&&!S.ham.length){giveLifeBack();S.state='win';S.prize=done.has(lvl)?0:PRIZE+CHEST_COINS*S.chestGot;done.add(lvl);if(S.prize)earn(S.prize);save();setTimeout(()=>showOv(true),450)}
     else if(!S.ham.length&&S.slots.every(b=>!b||b.idle)&&!liveMoves().length){S.stuck+=dt;if(S.stuck>.8){S.state='lose';showOv(false)}}
     else S.stuck=0}
 }
 
 function showOv(win){
   document.getElementById('ovT').textContent=win?'Картинка разобрана!':'Обойма забита';
-  document.getElementById('ovP').textContent=win?`Хомяки утащили все ${S.total} пикселей.`:'Хомяки в обойме не могут добраться до своего цвета, а новую норку взять нельзя. Попробуй другой порядок.'+(S.lifeTaken?` Жизней осталось: ${lives.n}.`:'');
+  document.getElementById('ovP').textContent=win?`Хомяки утащили всю картинку за ${S.moves} ${S.moves%10===1&&S.moves%100!==11?'ход':[2,3,4].includes(S.moves%10)&&![12,13,14].includes(S.moves%100)?'хода':'ходов'}.`:'Хомяки в обойме не могут добраться до своего цвета, а новую норку взять нельзя. Попробуй другой порядок.'+(S.lifeTaken?` Жизней осталось: ${lives.n}.`:'');
   document.getElementById('ovNext').hidden=!win||lvl>=99;
   document.getElementById('ovUndo').hidden=win||!S.undo.length;
   document.getElementById('ovPrize').hidden=!(win&&S.prize);
+  if(win&&S.prize){const b=document.querySelector('#ovPrize b');if(b)b.textContent='+'+S.prize;
+    const t=document.getElementById('ovPrizeNote');if(t)t.textContent=S.chestGot?`в том числе за сундучки: ${S.chestGot} × ${CHEST_COINS}`:''}
   document.getElementById('ov').hidden=false}
 document.getElementById('ovRetry').onclick=()=>load(lvl);
 document.getElementById('ovNext').onclick=()=>load(lvl+1);
@@ -628,6 +702,23 @@ function drawTag(cx,cy,id,a,pulse){ctx.save();ctx.globalAlpha=Math.max(0,a);cons
   ctx.strokeStyle='#fff';ctx.lineWidth=1.6;ctx.beginPath();ctx.ellipse(-7,0,3.2,2.2,0,0,Math.PI*2);ctx.stroke();ctx.beginPath();ctx.ellipse(-2.5,0,3.2,2.2,0,0,Math.PI*2);ctx.stroke();
   text(String(id+1),5.5,.5,11,'#fff','center',900);ctx.restore()}
 function hlPulse(id){return S.hlT>0&&S.hl===id?Math.abs(Math.sin(S.hlT*9)):0}
+function drawStone(px,py,cell){const s=cell-2;ctx.save();ctx.translate(px+1,py+1);
+  ctx.fillStyle='#6f6a64';rr(0,s*.08,s,s*.92,s*.3);ctx.fill();ctx.fillStyle='#8f8a84';rr(0,0,s,s*.86,s*.3);ctx.fill();
+  ctx.fillStyle='rgba(255,255,255,.25)';ctx.beginPath();ctx.ellipse(s*.32,s*.28,s*.18,s*.1,-.5,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='rgba(0,0,0,.25)';ctx.lineWidth=Math.max(1,s*.06);ctx.beginPath();ctx.moveTo(s*.55,s*.3);ctx.lineTo(s*.7,s*.55);ctx.lineTo(s*.62,s*.75);ctx.stroke();ctx.restore()}
+function drawIce(x,y,s,seed){ctx.save();ctx.fillStyle='rgba(225,244,255,.55)';rr(x,y,s,s,Math.min(4,s*.22));ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,.95)';ctx.lineWidth=Math.max(1,s*.07);ctx.beginPath();
+  const a=(seed%5)/5;ctx.moveTo(x+s*.15,y+s*(.3+a*.3));ctx.lineTo(x+s*.5,y+s*.45);ctx.lineTo(x+s*.85,y+s*(.2+a*.2));ctx.moveTo(x+s*.5,y+s*.45);ctx.lineTo(x+s*.42,y+s*.85);ctx.stroke();
+  ctx.strokeStyle='rgba(120,180,220,.8)';ctx.lineWidth=Math.max(1,s*.05);rr(x+.5,y+.5,s-1,s-1,Math.min(4,s*.22));ctx.stroke();ctx.restore()}
+function drawChest(ch){const{BX,BY,cell}=S,s=Math.max(9,cell*.9),cx=BX+(ch.x+.5)*cell,cy=BY+(ch.y+.5)*cell,b=Math.sin(time*4+ch.x)*.6;
+  ctx.save();ctx.translate(cx,cy+b);
+  ctx.fillStyle='#7a4a1c';rr(-s/2,-s*.15,s,s*.55,s*.12);ctx.fill();
+  ctx.fillStyle='#a8662a';rr(-s/2,-s*.45,s,s*.34,s*.16);ctx.fill();
+  ctx.fillStyle='#f2c21b';ctx.fillRect(-s/2,-s*.15,s,s*.1);ctx.fillRect(-s*.08,-s*.22,s*.16,s*.26);
+  ctx.strokeStyle='#3a2410';ctx.lineWidth=Math.max(1,s*.06);rr(-s/2,-s*.45,s,s*.85,s*.14);ctx.stroke();
+  const left=ch.dl-S.moves;if(cell>=13){ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(s*.45,-s*.45,s*.28,0,Math.PI*2);ctx.fill();
+    text(String(left),s*.45,-s*.44,Math.max(8,s*.34),'#7a4a1c','center',900)}
+  ctx.restore()}
 function drawRope(x1,y1,x2,y2,a,id){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.lineCap='round';const c=linkCol(id);
   ctx.strokeStyle='#fff';ctx.lineWidth=8;ctx.beginPath();ctx.moveTo(x1,y1);ctx.quadraticCurveTo((x1+x2)/2,(y1+y2)/2+10,x2,y2);ctx.stroke();
   ctx.strokeStyle=c;ctx.lineWidth=5;ctx.stroke();
@@ -679,10 +770,18 @@ function draw(){
   for(let y=0;y<n;y++)for(let x=0;x<n;x++){
     const c=S.grid[y][x],px=BX+x*cell,py=BY+y*cell;
     if(c===null){if(cell>11){ctx.fillStyle=T.line;ctx.fillRect(px+cell/2-1,py+cell/2-1,2,2)}continue}
+    if(c===STONE){drawStone(px,py,cell);continue}
     const r=S.res[y][x],ins=r?cell*.16+Math.sin(time*20)*cell*.05:ins0;
     rr(px+ins,py+ins,cell-ins*2,cell-ins*2,rad);ctx.fillStyle=S.L.pal[c];ctx.fill();
+    const u=S.vunder[y][x];if(u>=0){const s=cell*.42;rr(px+(cell-s)/2,py+(cell-s)/2,s,s,Math.min(3,s*.3));ctx.fillStyle=S.L.pal[u];ctx.fill();
+      ctx.lineWidth=Math.max(1,cell*.06);ctx.strokeStyle='rgba(255,255,255,.85)';ctx.stroke()}
+    if(S.vice[y][x])drawIce(px+ins,py+ins,cell-ins*2,x*7+y*13);
     if(!r){if(accessible(x,y)){ctx.fillStyle='rgba(255,255,255,.3)';ctx.fillRect(px+cell*.2,py+cell*.18,cell*.45,Math.max(1,cell*.12))}
       else{ctx.fillStyle='rgba(0,0,0,.08)';ctx.fillRect(px+ins0,py+ins0,cell-ins0*2,cell-ins0*2)}}}
+  for(const ch of S.chests){if(ch.gone||(ch.got&&S.grid[ch.y][ch.x]===null))continue;drawChest(ch)}
+  S.pops.forEach(p=>{ctx.globalAlpha=Math.min(1,p.t*2);text(p.txt,p.x,p.y-20*(1.1-p.t),14,'#c98a12','center',900);ctx.globalAlpha=1});
+  const live=S.chests.filter(c=>!c.got&&!c.gone);
+  if(live.length){const m=Math.min(...live.map(c=>c.dl-S.moves));text(`сундучок: ${m} ${m===1?'ход':m<5?'хода':'ходов'}`,W/2+8,28,12,'#b07a0e','center',900)}
   text('ОБОЙМА',20,402,11,T.muted,'left',900);
   text(`${S.slots.filter(Boolean).length}/${S.slotsN}`,370,402,11,T.muted,'right',900);
   const sx=S.shake>0?Math.sin(S.shake*60)*4:0;
