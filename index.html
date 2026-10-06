@@ -70,6 +70,10 @@ canvas{display:block;touch-action:manipulation;-webkit-tap-highlight-color:trans
 #lvGrid{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;overflow-y:auto;min-height:0}
 #lvGrid button{padding:5px 0;font-size:.72rem;border-radius:7px;font-variant-numeric:tabular-nums}
 #lvGrid button.done{background:var(--line)}
+#lvGrid button.hard{border-color:#c0392b}
+#lvPages{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+#lvPages button{padding:4px 0;font-size:.68rem;border-radius:7px;display:flex;flex-direction:column;align-items:center;line-height:1.15;font-variant-numeric:tabular-nums}
+#lvPages button small{font-size:.6rem;opacity:.75;min-height:.7rem}
 #lvGrid button.on{background:var(--accent);border-color:var(--accent);color:#fff}
 .legend{font-size:.75rem}
 .tools{width:100%;max-width:420px;display:flex;align-items:center;gap:5px;padding-block:2px 0}
@@ -156,8 +160,9 @@ button:disabled{opacity:.5;cursor:default}
   </div>
   <div class="overlay" id="lv" hidden>
     <div class="card lvcard">
-      <h2>100 уровней</h2>
-      <p class="legend">Хомяки грызут снизу вверх. С 7-го уровня — связанные норки, их берут парой. С 12-го — скрытые норки «?». Дальше на поле: сундучки (9), лёд (14), камни (20), двухслойные пиксели (26)</p>
+      <h2>1000 уровней</h2>
+      <div id="lvPages"></div>
+      <p class="legend">Хомяки грызут снизу вверх. С 7-го уровня — связанные норки, с 12-го — скрытые «?», дальше на поле сундучки, лёд, камни и двухслойные пиксели. После сотого — сложнее с каждой сотней; уровни с красной рамкой (каждый 10-й) — самые трудные в десятке.</p>
       <div id="lvGrid"></div>
       <div class="row"><button id="lvClose">Закрыть</button></div>
       <a class="backlink" href="https://mlymir.ru/">Вернуться в «Мой маленький мир»</a>
@@ -167,7 +172,7 @@ button:disabled{opacity:.5;cursor:default}
 
 <script src="/sdk/v1.js" data-app="hamsters"></script>
 <script>
-const LEVEL_SEEDS=[[74,4],[0,4],[0,4],[0,3],[0,3],[64,3],[82,3],[24,3],[63,3],[58,3],[116,3],[40,3],[115,3],[90,3],[102,3],[55,3],[34,3],[88,3],[96,3],[6,3],[101,3],[44,3],[49,3],[23,3],[108,3],[91,3],[40,3],[93,3],[31,3],[23,3],[3,3],[7,3],[89,3],[65,3],[25,3],[14,3],[22,3],[33,3],[32,3],[47,3],[35,3],[11,3],[63,3],[79,3],[14,3],[4,3],[27,3],[16,3],[49,3],[77,3],[113,3],[72,3],[79,3],[72,3],[84,3],[0,3],[0,3],[5,3],[54,3],[5,3],[48,3],[97,3],[30,3],[59,3],[0,3],[12,3],[26,3],[47,3],[39,3],[40,3],[2,4],[11,3],[4,3],[61,3],[17,4],[28,3],[52,3],[1,3],[101,3],[15,3],[68,4],[0,3],[95,3],[0,3],[82,3],[55,3],[50,3],[16,3],[12,3],[0,3],[54,3],[69,3],[8,3],[119,3],[0,4],[0,3],[50,3],[0,3],[0,4],[43,4]];
+const LEVEL_SEEDS=[[74,4],[0,4],[0,4],[0,3],[0,3],[64,3],[82,3],[24,3],[63,3],[58,3],[116,3],[40,3],[115,3],[90,3],[102,3],[55,3],[34,3],[88,3],[96,3],[6,3],[101,3],[44,3],[49,3],[23,3],[108,3],[91,3],[40,3],[93,3],[31,3],[23,3],[3,3],[7,3],[89,3],[65,3],[25,3],[14,3],[22,3],[33,3],[32,3],[47,3],[35,3],[11,3],[63,3],[79,3],[14,3],[4,3],[27,3],[16,3],[49,3],[77,3],[113,3],[72,3],[79,3],[72,3],[84,3],[0,3],[0,3],[5,3],[54,3],[5,3],[48,3],[97,3],[30,3],[59,3],[0,3],[12,3],[26,3],[47,3],[39,3],[40,3],[2,4],[11,3],[4,3],[61,3],[17,4],[28,3],[52,3],[1,3],[101,3],[15,3],[68,4],[0,3],[95,3],[0,3],[82,3],[55,3],[50,3],[16,3],[12,3],[0,3],[54,3],[69,3],[8,3],[119,3],[0,4],[0,3],[50,3],[0,3],[0,4],[43,4],[0,3],[8,3],[4,3],[17,3],[2,3],[1,3],[1,4],[3,3],[8,3],[1,4],[14,3],[11,3],[5,3],[7,3],[8,3],[0,3],[5,3],[4,3],[0,3],[16,3],[2,3],[21,3],[0,3],[18,3],[11,3],[4,3],[27,3],[1,3],[17,3],[1,3],[2,3],[26,3],[5,3],[18,3],[11,3],[3,3],[0,3],[11,4],[0,3],[33,3],[0,3],[0,3],[10,3],[0,3],[0,3],[0,3],[27,4,0.75],[0,3],[0,4],[4,3],[0,3],[18,3],[0,3],[2,4],[4,4],[6,3],[4,4],[1,3],[0,3],[0,3],[11,3],[5,3],[3,3],[1,3],[28,3],[0,3],[0,3],[0,4],[0,3],[0,4],[21,3],[16,3],[0,3],[16,3],[11,3],[0,3],[32,3],[0,3],[0,3],[13,4],[6,3],[0,3],[2,3],[0,3],[0,3],[22,3],[0,3],[23,3],[0,3],[26,3],[0,3],[2,3],[20,4],[3,3],[0,3],[20,4],[0,4],[14,3],[0,4,0.75],[1,3],[26,3],[11,3],[0,3],[19,3],[19,3],[1,3],[2,4,0.75],[27,4],[0,3],[12,4],[3,3],[1,4],[0,4],[18,3],[1,3],[0,3],[3,3],[25,3],[4,3],[4,3],[0,3],[23,3],[13,3],[0,3],[0,3],[0,3],[32,4],[15,3],[3,3],[3,4],[16,3],[16,3],[0,3],[0,3],[0,3],[5,3],[0,4],[27,3],[0,3],[9,3],[20,4],[39,3],[2,3],[1,3],[0,3],[3,3],[17,4],[0,4],[4,4,0.55],[2,4],[0,3],[13,3],[16,4],[37,3],[0,3],[0,3],[13,3],[1,3],[0,4],[0,3],[0,3],[12,3],[0,3],[0,3],[0,3],[8,3],[0,3],[0,4],[22,4],[23,4],[27,3],[11,3],[0,3],[0,3],[0,4],[38,3],[39,4],[0,3],[3,3],[0,3],[0,3],[2,3],[1,4],[14,3],[0,3],[3,3],[0,3],[34,3],[3,4],[2,3],[13,3],[8,3],[8,3],[0,3],[0,4],[0,4],[0,4],[0,4],[1,4,0.75],[3,3],[20,3],[1,3],[3,3],[38,3],[11,3],[28,3],[1,3],[1,4],[0,3],[0,4],[0,4],[0,3],[34,3],[10,3],[12,3],[0,3],[0,3],[23,3,0.75],[0,3],[14,4],[8,3],[19,3],[0,3],[0,4],[6,3],[18,3],[0,3],[1,3],[3,4],[0,3],[0,3],[5,3],[0,3],[5,3],[2,3],[20,3],[6,4],[0,3],[28,4],[4,3],[17,3],[23,3],[0,4],[2,4],[16,3],[1,4],[7,4,0.75],[25,4],[0,4],[30,4],[1,3],[0,4],[26,4,0.55],[14,3],[4,3],[1,4,0.75],[0,3],[0,3],[0,4],[0,3],[19,3],[0,3],[0,3],[2,3],[1,4,0.55],[0,4],[0,3,0.55],[0,3],[3,4],[0,4,0.4],[19,3],[20,3],[1,3],[15,4],[0,3],[0,4],[0,3],[32,3],[39,3],[0,4],[0,3],[3,3],[0,4],[8,4],[0,3],[0,4],[9,4],[29,3],[0,4],[35,4],[6,3],[32,4],[0,4,0.75],[16,4],[1,4],[0,4],[2,3],[8,3],[0,4],[0,4],[0,3],[18,3],[1,3],[5,4],[1,4],[0,3],[8,4],[17,4],[0,4,0.75],[0,4],[10,4],[20,3],[0,4],[33,3],[9,3],[1,3],[0,4],[26,4],[9,3],[0,4,0.55],[0,3],[0,3],[16,3],[37,3],[28,3],[33,4],[0,3],[0,3],[0,4,0.55],[23,3],[5,3],[9,3],[12,3],[13,4],[1,4],[0,3],[0,3],[0,3],[0,3],[0,4],[0,3],[5,3],[5,4],[4,4],[31,3],[0,3,0.75],[0,4],[0,4,0.4],[14,4],[0,4],[0,4],[10,3],[4,3],[0,3],[4,3],[0,3],[0,4,0.75],[11,3],[2,4],[38,3],[3,3],[6,4],[14,4],[39,4],[0,4],[12,4],[15,4],[3,4],[0,3,0.75],[3,4,0.4],[2,3],[2,3],[1,4,0.75],[11,3],[10,4],[0,3],[1,4],[0,4,0.75],[0,4],[0,4,0.75],[1,3],[0,3],[13,3],[1,3],[0,3],[1,3],[0,4],[0,3],[0,3],[0,3,0.55],[15,3],[1,4],[0,3,0.75],[1,4],[0,3],[0,3],[0,4],[0,3],[0,3],[0,3],[0,3],[25,3],[13,4],[12,4],[14,4],[0,3],[0,3],[0,4],[0,3],[0,3],[16,3],[31,3],[13,3],[0,3],[0,4,0.75],[0,4,0.75],[10,3],[7,3],[0,4],[10,4,0.4],[3,3],[0,4],[0,4],[25,3],[5,3],[3,4],[4,4,0.75],[0,3],[0,4],[16,4],[36,3],[0,3],[0,4],[0,4],[6,3],[8,3],[0,3],[18,4],[0,4],[0,4,0.75],[20,3],[0,3],[0,3],[0,3],[27,4],[1,4],[1,4,0.55],[0,3],[3,4],[0,4,0.75],[9,3],[1,3],[0,3],[2,4],[1,3],[3,3],[0,3,0.55],[30,4],[4,3,0.55],[0,4,0.55],[0,3],[0,4],[0,4,0.55],[13,3],[0,3],[0,3],[0,4],[0,3],[26,4],[0,3],[0,4],[0,4],[28,4],[0,4],[0,4],[0,3],[0,3],[0,3],[1,3],[3,3],[3,3],[7,3],[2,3],[0,4,0.75],[3,3,0.55],[0,3],[0,4],[0,4,0.75],[1,4,0.4],[5,4],[0,4,0.75],[0,4],[7,4],[1,3],[16,3],[0,4],[0,4],[4,3],[0,4],[0,3],[0,3],[1,4],[1,3],[12,4],[1,5,0.4],[3,4],[3,4],[6,4],[2,4],[0,4,0.75],[1,4],[5,4],[14,3],[0,4,0.55],[3,3],[15,4],[0,5],[0,3],[0,4],[7,3],[6,4],[0,3],[0,4],[0,3,0.75],[0,4],[0,3],[0,4],[0,4],[5,4],[0,4,0.4],[0,4],[0,4],[0,5],[2,3],[0,3],[8,3],[0,4],[0,4],[0,4,0.75],[5,3],[16,4,0.55],[3,4],[5,4],[39,3],[0,4,0.75],[0,4,0.75],[24,4,0.4],[8,3,0.55],[0,4],[3,4,0.75],[0,3],[9,4],[11,4],[0,3],[3,3],[0,4],[0,4,0.4],[2,4,0.55],[2,4,0.75],[1,3],[19,4],[8,3],[0,4],[0,4,0.75],[0,4,0.75],[0,4],[0,4,0.4],[10,4],[0,3,0.55],[12,5,0.4],[0,3,0.75],[0,5,0.3],[5,3],[26,4,0.4],[22,4,0.75],[29,4,0.4],[1,4],[4,4],[0,3],[0,4],[0,4],[1,4,0.75],[0,4],[1,4],[11,4,0.4],[8,4],[0,4,0.75],[11,4,0.55],[0,5,0.3],[0,3,0.75],[1,3],[0,4],[10,4],[0,4,0.75],[16,3],[9,4],[0,4,0.75],[17,4],[0,4,0.75],[1,3],[1,4],[0,4],[0,5,0.4],[0,4,0.75],[1,4],[0,3],[26,4,0.55],[7,4,0.75],[0,3,0.4],[0,4],[0,4],[28,3],[20,4,0.75],[0,4,0.4],[11,3],[6,4],[0,4],[2,3],[0,3,0.75],[0,4,0.55],[4,3],[12,3],[7,3],[31,4],[26,4],[0,3,0.55],[0,3,0.4],[4,4,0.55],[0,3],[12,4,0.4],[32,4],[0,4,0.75],[0,3],[23,4],[0,3],[8,4,0.4],[1,3],[0,3,0.4],[17,4,0.4],[0,4],[7,3],[9,3],[28,3],[0,4,0.75],[0,3],[0,3],[0,4],[0,3],[0,4],[5,4],[11,4],[1,3],[0,4],[0,4,0.75],[0,4,0.55],[0,3],[16,4,0.4],[0,5],[0,3],[0,4,0.75],[27,3],[17,3],[15,3],[23,4],[1,4],[14,3],[17,3],[0,3],[0,5],[22,3],[1,4],[7,4,0.55],[15,4],[0,4],[0,4,0.4],[15,4],[0,3],[0,4],[0,4],[1,3],[0,3],[9,3],[0,3],[1,3,0.75],[1,4],[1,4,0.55],[1,4],[0,4,0.4],[0,3],[0,4,0.4],[0,4],[1,3],[0,3],[1,4,0.75],[0,4,0.55],[9,4,0.75],[0,4],[0,3],[0,4,0.4],[1,4,0.55],[1,3,0.55],[7,3],[0,3],[0,3],[0,4],[0,3],[0,3],[0,4,0.55],[3,4,0.4],[0,4,0.4],[0,3],[0,5],[4,4,0.75],[0,3],[0,4],[0,3],[0,5],[8,3],[0,4,0.75],[0,4],[3,3],[7,4],[9,3],[29,4],[0,4],[6,4,0.75],[0,4],[0,4,0.4],[7,4,0.4],[1,5],[0,4],[26,4,0.4],[1,4],[10,3],[0,4,0.75],[15,4],[0,4,0.55],[0,4],[1,4,0.4],[0,4,0.4],[0,3],[0,3],[1,5],[2,3,0.55],[15,4,0.55],[15,4,0.55],[0,4],[1,4,0.75],[0,4],[10,4],[0,3],[34,4],[8,3,0.75],[0,4],[0,4,0.55],[29,3],[5,4],[2,4],[0,3],[0,3,0.55],[0,3],[8,3],[0,4],[3,3],[0,3],[4,3],[0,4,0.75],[18,4,0.75],[2,5],[1,4],[6,4,0.75],[0,4],[12,3],[0,3],[2,4],[1,4,0.55],[3,4,0.75],[2,4],[8,4],[0,4],[0,4],[13,4,0.55],[3,4,0.75],[0,4,0.4],[16,3],[7,4],[0,4],[4,3],[0,4],[0,4,0.75],[20,3],[37,4],[12,4,0.75],[1,3],[1,4],[11,4],[0,4,0.4],[0,4,0.75],[0,4,0.3],[0,4,0.75],[31,3],[2,3],[3,4,0.55],[0,4],[0,3],[1,4],[0,4],[0,4],[0,4,0.75],[0,5,0.3],[0,4],[0,3],[9,3,0.75],[2,4],[0,4],[0,4,0.75],[1,4,0.75],[3,4,0.55],[0,4,0.55],[1,3,0.55],[29,3],[3,4,0.75],[0,4,0.55],[0,5],[0,4,0.4],[30,3],[1,5,0.4],[0,3],[12,3],[8,3,0.55],[5,3],[0,4,0.75],[0,4],[0,3],[6,4,0.55],[0,4],[0,4],[1,4],[0,3,0.75],[0,4],[0,4],[6,3],[0,4,0.55],[6,4],[0,4],[0,3],[0,4,0.4],[7,4,0.75],[0,4,0.55],[0,4],[2,3],[0,4,0.75],[6,4],[0,4,0.55],[0,4,0.4],[13,4,0.55],[0,4,0.75],[0,4,0.55],[0,3],[0,4,0.75],[0,4],[28,3],[17,4],[0,3],[0,4,0.75],[2,4],[4,4,0.55],[0,3],[0,4,0.3],[0,4,0.4],[0,3],[1,4,0.55],[20,4],[0,4,0.75],[20,4],[14,4,0.4],[1,4,0.75],[0,3],[1,3],[5,4,0.75],[0,3,0.55],[0,4],[6,4,0.55],[5,4,0.55],[1,3],[0,4],[0,4,0.75],[4,4,0.75],[0,4],[19,4],[1,4],[0,4,0.75],[0,4],[14,4],[3,3],[0,3],[12,4,0.4],[1,3],[0,4,0.75],[0,3]];
 /*GEN*/
 function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 function shuf(a,r){for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
@@ -196,8 +201,18 @@ const MOTIFS=[
 const BGP=['#a9d6ef','#bfe6b4','#f7e29a','#f4bfd0','#cdbff0','#f8c9a0'];
 const MCP=['#e2433a','#f08a24','#f2c21b','#4fae45','#1f8f82','#2f6fca','#6b4ab8','#d94f96','#8a5631','#fff4e0','#9ad13c','#26a6d9'];
 const OUT='#2a2233';
-function params(i){const t=i/99;return{n:Math.round(10+22*Math.pow(t,.85)),C:Math.min(9,2+Math.floor(i/9)),slots:i<3?4:3,cols:i<40?3:4}}
-const spamTarget=i=>.75*Math.exp(-i/9)+.03;
+const LEVELS=1000;
+// Уровни 101–1000: медленный рост (late) и «пила» внутри каждого десятка (wave: 0 на x1 → 1 на x0-м).
+const late=i=>i<100?0:Math.min(1,(i-100)/600);
+const wave=i=>i<100?0:(i%10)/9;
+// Третье число в LEVEL_SEEDS — ослабление механик поля для уровня, который иначе не собирается в маленькую обойму.
+const DK=i=>typeof LEVEL_SEEDS!=='undefined'&&LEVEL_SEEDS&&LEVEL_SEEDS[i]&&LEVEL_SEEDS[i][2]||1;
+const dens=i=>(.6+.8*wave(i))*DK(i);
+function params(i){
+  if(i>=100){const n=Math.max(22,Math.min(34,Math.round(23+8*late(i)+3*wave(i))));
+    return{n,C:Math.min(10,8+Math.floor(late(i)*2.5))-(i%10===0?1:0),slots:3,cols:4}}
+  const t=i/99;return{n:Math.round(10+22*Math.pow(t,.85)),C:Math.min(9,2+Math.floor(i/9)),slots:i<3?4:3,cols:i<40?3:4}}
+const spamTarget=i=>i>=100?.02:.75*Math.exp(-i/9)+.03;
 
 /* ---- simulation shared by level design and the game's rules ---- */
 function slotBX(si,S,n){const sw=Math.min(62,(350-8*(S-1))/S),x0=(390-(S*sw+(S-1)*8))/2;return(x0+sw/2+si*(sw+8)-35)/320*n-.5}
@@ -247,14 +262,14 @@ function dfsSolve(g,deal,S,limit){let nodes=0;const seen=new Set();
   const r=rec(simNew(g,deal,S));return{ok:r===true,nodes}}
 function greedyWins(g,deal,S,seed){let w=runPolicy(g,deal,S,'smart')?1:0;const r=mulberry(seed);for(let k=0;k<8;k++)if(runPolicy(g,deal,S,'smart',r))w++;return w/9}
 function spamRate(g,deal,S,runs,seed){const r=mulberry(seed);let w=0;for(let k=0;k<runs;k++)if(runPolicy(g,deal,S,'spam',r))w++;return w/runs}
-const linkP=i=>i<6?0:Math.min(.4,.12+(i-6)*.01);
-const hiddenP=i=>i<11?0:Math.min(.45,.18+(i-11)*.006);
+const linkP=i=>i>=100?Math.min(.5,.38+.12*late(i)):i<6?0:Math.min(.4,.12+(i-6)*.01);
+const hiddenP=i=>i>=100?Math.min(.6,.45+.15*late(i)):i<11?0:Math.min(.45,.18+(i-11)*.006);
 const preloadP=i=>i<4?0:Math.min(.2,.1+i*.003);
-const iceP=i=>i<13?0:Math.min(.16,.05+(i-13)*.0025);
-const stoneP=i=>i<19?0:Math.min(.045,.015+(i-19)*.0006);
-const layerP=i=>i<25?0:Math.min(.6,.2+(i-25)*.006);
+const iceP=i=>i>=100?Math.min(.28,(.12+.1*late(i))*dens(i)):i<13?0:Math.min(.16,.05+(i-13)*.0025);
+const stoneP=i=>i>=100?Math.min(.07,(.03+.03*late(i))*dens(i)):i<19?0:Math.min(.045,.015+(i-19)*.0006);
+const layerP=i=>i>=100?Math.min(.8,(.4+.3*late(i))*dens(i)):i<25?0:Math.min(.6,.2+(i-25)*.006);
 const chestN=i=>i<8?0:i<30?1:i<60?2:3;
-const obvTarget=i=>i<3?1:Math.max(0,.75-i*.04);
+const obvTarget=i=>i>=100?0:i<3?1:Math.max(0,.75-i*.04);
 const LCACHE={};
 function makeLevel(i){
   if(LCACHE[i])return LCACHE[i];
@@ -269,9 +284,9 @@ function makeLevel(i){
     case'checker':return(((Math.floor((u+1)*2.5)+Math.floor((v+1)*2.5))%nb)+nb)%nb;
     default:return Math.floor(((Math.atan2(v,u)+Math.PI)/(2*Math.PI))*nb*2+ph)%nb}};
   const bgC=shuf(BGP.slice(),rng).slice(0,nb),mC=shuf(MCP.slice(),rng).slice(0,mp);
-  const sc=1.25,keys=[];
+  const sc=i<100?1.25:1.12+.26*((i*37)%10)/10,mir=i>=100&&((i>>1)&1)?-1:1,keys=[];
   for(let y=0;y<n;y++){const row=[];for(let x=0;x<n;x++){const u=((x+.5)/n*2-1)*sc,v=((y+.5)/n*2-1)*sc;
-    let part=M.f(u,v);if(part>mp)part=((part-1)%mp)+1;row.push(part?'m'+part:'b'+bgi(u,v))}keys.push(row)}
+    let part=M.f(u*mir,v);if(part>mp)part=((part-1)%mp)+1;row.push(part?'m'+part:'b'+bgi(u,v))}keys.push(row)}
   if(outline)for(let y=0;y<n;y++)for(let x=0;x<n;x++){if(keys[y][x][0]!=='b')continue;
     for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]]){const k=keys[y+dy]&&keys[y+dy][x+dx];if(k&&k[0]==='m'){keys[y][x]='o';break}}}
   const colOf=k=>k==='o'?OUT:k[0]==='b'?bgC[+k.slice(1)]:mC[+k.slice(1)-1];
@@ -292,9 +307,24 @@ function makeLevel(i){
   grid.ice=ice;grid.under=under;grid.stones=grid.some(r=>r.includes(STONE));
   const counts=pal.map(()=>0);
   for(let y=0;y<n;y++)for(let x=0;x<n;x++){const c=grid[y][x];if(c===STONE)continue;counts[c]+=1+ice[y][x];if(under[y][x]>=0)counts[under[y][x]]++}
-  const cap=Math.max(5,Math.round(n*n/(10+i*.3)));
+  const cap=Math.max(5,Math.round(n*n/(i<100?10+i*.3:36+8*wave(i))));
   const bur=[];counts.forEach((cnt,c)=>{let m=cnt;while(m>0){let k=Math.max(4,Math.round(cap*(.6+rng()*.8)));if(m-k>0&&m-k<4)k=m;k=Math.min(k,m);bur.push({c,left:k});m-=k}});
   // Build a deal backwards from a valid play order, so every level has a guaranteed solution.
+  // Уровни после 100-го: пары собираются прямо в решении (обе норки ставятся до того, как хомяки начнут есть),
+  // поэтому верёвки не ломают проходимость на больших полях.
+  const mkDeal2=seed=>{const r2=mulberry(77+i*131+seed*9973),S=p.slots,pre=preloadP(i);
+    const pool=bur.map(o=>({...o,link:-1})),st=simNew(grid,[],S),units=[];let lid=0;
+    const take=()=>{const ac=accCounts(st),free=st.slots.filter(x=>!x).length,open=pool.filter(o=>ac[o.c]),closed=pool.filter(o=>!ac[o.c]);
+      const o=(free>=2&&closed.length&&r2()<pre)||!open.length?closed[Math.floor(r2()*closed.length)]:open[Math.floor(r2()*open.length)];
+      pool.splice(pool.indexOf(o),1);const si=st.slots.indexOf(null);st.slots[si]={c:o.c,left:o.left,q:st.q=(st.q||0)+1};return o};
+    while(pool.length){settle(st);const free=st.slots.filter(x=>!x).length;if(!free)return null;
+      if(free>=2&&pool.length>=2&&r2()<linkP(i)){const a=take(),b=take();a.link=b.link=lid++;units.push([a,b])}else units.push([take()])}
+    settle(st);if(st.rem)return null;
+    const d=Array.from({length:p.cols},()=>[]),order=[];
+    const pickCol=ex=>{const w=d.map((c,k)=>k===ex?0:1/(1+c.length*c.length));let t=r2()*w.reduce((a,b)=>a+b),c=0;while((t-=w[c])>0)c++;return c};
+    for(const u of units){const mv=[];let ex=-1;for(const o of u){const c=pickCol(ex);d[c].push(o);mv.push(c);ex=c}order.push(mv)}
+    const t=simNew(grid,d,S);for(const mv of order){settle(t);if(!simMoves(t).some(m=>m.length===mv.length&&m.every(x=>mv.includes(x))))return null;simApply(t,mv)}
+    settle(t);if(t.rem)return null;d.order=order;return d};
   const mkDeal=seed=>{const r2=mulberry(77+i*131+seed*9973),S=p.slots,pre=preloadP(i);
     const pool=bur.map(o=>({...o,link:-1})),st=simNew(grid,[],S),seq=[],freeAt=[];
     while(pool.length){settle(st);const free=st.slots.filter(x=>!x).length;if(!free)return null;
@@ -314,8 +344,9 @@ function makeLevel(i){
     d.order=order;return d};
   let slots=p.slots,deal=null,tries=0;
   const pre=typeof LEVEL_SEEDS!=='undefined'&&LEVEL_SEEDS[i];
-  if(pre){p.slots=slots=pre[1];deal=mkDeal(pre[0])}
-  for(let s=0;!deal;s++){tries++;if(s%40==39)p.slots=++slots;deal=mkDeal(s)}
+  const mk=i<100?mkDeal:mkDeal2;
+  if(pre){p.slots=slots=pre[1];deal=mk(pre[0])}
+  for(let s=0;!deal;s++){tries++;if(s%40==39)p.slots=++slots;deal=mk(s)}
   // Hidden burrows: colour unknown until the burrow reaches the top of its column. Separate RNG, deal untouched.
   const rh=mulberry(5003+i*389);deal.forEach(col=>col.forEach((o,k)=>{o.hidden=k>0&&rh()<hiddenP(i)}));
   // Сундучки: клетки, которые в эталонном решении съедаются посередине партии; срок — тот же ход + 1.
@@ -336,7 +367,7 @@ const EARTH='#8a5631',HOLE='#2a170c';
 const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
 let T={},S,lvl=0,scale=1,last=0,time=0,done=new Set(),coins=0;
 const PRICE_HINT=300,PRICE_CUT=300,PRICE_UNDO=200,PRICE_SHUF=600,PRIZE=20;
-try{lvl=Math.min(99,+localStorage.getItem('hm_lvl')||0);done=new Set(JSON.parse(localStorage.getItem('hm_done')||'[]'));
+try{lvl=Math.min(LEVELS-1,+localStorage.getItem('hm_lvl')||0);done=new Set(JSON.parse(localStorage.getItem('hm_done')||'[]'));
   const c=localStorage.getItem('hm_coins');coins=c===null?PRIZE*done.size:Math.max(0,+c||0)}catch(e){}
 function save(){try{localStorage.setItem('hm_lvl',lvl);localStorage.setItem('hm_done',JSON.stringify([...done]));localStorage.setItem('hm_coins',coins)}catch(e){}}
 function showCoins(bump){const el=document.getElementById('coinN');if(!el)return;el.textContent=coins;
@@ -571,7 +602,7 @@ function shuffleBurrows(){
   if(!S.sim.slots.some(x=>!x)&&!S.ham.length){say('Обойма забита — перемешивание не поможет. Попробуй отменить ход');S.msgT=3;return}
   if(coins<PRICE_SHUF)return poor(PRICE_SHUF,'Перемешать норки');
   const lens=S.cols.map(c=>c.length),rng=mulberry(Date.now()|0),t0=performance.now();let pick=null;
-  for(let k=0;k<400&&performance.now()-t0<1500&&!pick;k++)pick=buildShuffle(cards,lens,rng);
+  for(let k=0;k<800&&performance.now()-t0<3000&&!pick;k++)pick=buildShuffle(cards,lens,rng);
   const cols=pick;
   if(!cols){say('Не нашлось удачной раскладки — монеты не списаны');S.msgT=3;return}
   spend(PRICE_SHUF);
@@ -663,7 +694,7 @@ function update(dt){
 function showOv(win){
   document.getElementById('ovT').textContent=win?'Картинка разобрана!':'Обойма забита';
   document.getElementById('ovP').textContent=win?`Хомяки утащили всю картинку за ${S.moves} ${S.moves%10===1&&S.moves%100!==11?'ход':[2,3,4].includes(S.moves%10)&&![12,13,14].includes(S.moves%100)?'хода':'ходов'}.`:'Хомяки в обойме не могут добраться до своего цвета, а новую норку взять нельзя. Попробуй другой порядок.'+(S.lifeTaken?` Жизней осталось: ${lives.n}.`:'');
-  document.getElementById('ovNext').hidden=!win||lvl>=99;
+  document.getElementById('ovNext').hidden=!win||lvl>=LEVELS-1;
   document.getElementById('ovUndo').hidden=win||!S.undo.length;
   document.getElementById('ovPrize').hidden=!(win&&S.prize);
   if(win&&S.prize){const b=document.querySelector('#ovPrize b');if(b)b.textContent='+'+S.prize;
@@ -672,12 +703,18 @@ function showOv(win){
 document.getElementById('ovRetry').onclick=()=>load(lvl);
 document.getElementById('ovNext').onclick=()=>load(lvl+1);
 document.getElementById('btnRe').onclick=()=>load(lvl);
-document.getElementById('btnLv').onclick=()=>{
+// Выбор уровня: страницы по 100, на каждой — сколько пройдено; каждый 10-й уровень после сотого — сложный.
+let lvPage=0;
+function drawLevels(){
+  const pg=document.getElementById('lvPages');pg.innerHTML='';
+  for(let k=0;k<LEVELS/100;k++){const b=document.createElement('button');let d=0;for(let i=k*100;i<k*100+100;i++)if(done.has(i))d++;
+    b.innerHTML=`${k*100+1}–${k*100+100}<small>${d?d+'/100':''}</small>`;b.className=k===lvPage?'on':'';b.onclick=()=>{lvPage=k;drawLevels()};pg.appendChild(b)}
   const g=document.getElementById('lvGrid');g.innerHTML='';
-  for(let i=0;i<100;i++){const b=document.createElement('button');b.textContent=i+1;
-    b.className=(i===lvl?'on ':'')+(done.has(i)?'done':'');b.title=`${MOTIFS[i%MOTIFS.length].name} · ${params(i).n}×${params(i).n}`;
-    b.onclick=()=>load(i);g.appendChild(b)}
-  document.getElementById('lv').hidden=false};
+  for(let i=lvPage*100;i<lvPage*100+100;i++){const b=document.createElement('button');b.textContent=i+1;
+    b.className=(i===lvl?'on ':'')+(done.has(i)?'done ':'')+(i>=100&&i%10===9?'hard':'');
+    b.title=`${MOTIFS[i%MOTIFS.length].name} · ${params(i).n}×${params(i).n}`+(i>=100&&i%10===9?' · сложный':'');
+    b.onclick=()=>load(i);g.appendChild(b)}}
+document.getElementById('btnLv').onclick=()=>{lvPage=Math.floor(lvl/100);drawLevels();document.getElementById('lv').hidden=false};
 document.getElementById('lvClose').onclick=()=>document.getElementById('lv').hidden=true;
 
 /* ---------- drawing ---------- */
