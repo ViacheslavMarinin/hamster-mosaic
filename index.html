@@ -164,7 +164,7 @@ button:disabled{opacity:.5;cursor:default}
       <div id="lvPages"></div>
       <p class="legend">Хомяки грызут снизу вверх. С 7-го уровня — связанные норки, с 12-го — скрытые «?», дальше на поле сундучки, лёд, камни и двухслойные пиксели. После сотого — сложнее с каждой сотней; уровни с красной рамкой (каждый 10-й) — самые трудные в десятке.</p>
       <div id="lvGrid"></div>
-      <div class="row"><button id="lvClose">Закрыть</button></div>
+      <div class="row"><button id="lvFb" hidden>Написать нам</button><button id="lvClose">Закрыть</button></div>
       <a class="backlink" href="https://mlymir.ru/">Вернуться в «Мой маленький мир»</a>
     </div>
   </div>
@@ -789,6 +789,7 @@ function drawLevels(){
     b.onclick=()=>load(i);g.appendChild(b)}}
 document.getElementById('btnLv').onclick=()=>{lvPage=Math.floor(lvl/100);drawLevels();document.getElementById('lv').hidden=false};
 document.getElementById('lvClose').onclick=()=>document.getElementById('lv').hidden=true;
+if(window.Platform){const f=document.getElementById('lvFb');f.hidden=false;f.onclick=()=>{document.getElementById('lv').hidden=true;Platform.feedback()}}
 
 /* ---------- drawing ---------- */
 function rr(x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r)}
